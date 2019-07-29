@@ -15,7 +15,7 @@ import retrofit2.http.POST;
 public interface apiCalls {
 
 
-    @POST("login")
+    @POST("Login")
     Call<loginStatus> loginPost(@Body loginPost loginPost);
 
 //    @POST("orders/new")

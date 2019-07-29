@@ -19,7 +19,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class login extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private com.hcl.InstantPickup.services.apiCalls apiCalls;
     private TextView textViewResult;
 
@@ -49,7 +49,7 @@ public class login extends AppCompatActivity {
         // Create an instance of model class loginPost
         final loginPost login = new loginPost(user, pass);
 
-        // Make POST request to /login
+        // Make POST request to /Login
         Call<loginStatus> call = apiCalls.loginPost(login);
 
         // Async callback and waits for response

@@ -2,12 +2,19 @@ package com.hcl.InstantPickup.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.login.loginPost;
 import com.hcl.InstantPickup.models.login.loginStatus;
@@ -27,7 +34,14 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        String token = task.getResult().getToken();
+                        Log.e("API Key", token);
+                    }
+                });
         textViewResult = findViewById(R.id.text_view_result);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(" http://13bf4aaf.ngrok.io/")

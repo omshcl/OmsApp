@@ -1,6 +1,6 @@
 package com.hcl.InstantPickup.location;
 
-public interface LocationCallback {
+public interface LocationTrackingCallback {
 
     void onEntersShop();
 

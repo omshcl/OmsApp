@@ -1,5 +1,6 @@
 package com.hcl.InstantPickup.location;
 
+
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -15,17 +16,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.hcl.InstantPickup.CustomerDashboard;
 import com.hcl.InstantPickup.R;
 
 public class LocationService extends Service {
 
 
-
     private final IBinder binder = new LocalBinder();
-    private LocationCallback serviceCallbacks;
+    private LocationTrackingCallback serviceCallbacks;
 
     public class LocalBinder extends Binder {
-        LocationService getService() {
+        public LocationService getService() {
             return LocationService.this;
         }
 
@@ -44,7 +45,7 @@ public class LocationService extends Service {
         return super.onStartCommand(intent,flags,startId);
     }
 
-    public void setCallbacks(LocationCallback callbacks) {
+    public void setCallbacks(LocationTrackingCallback callbacks) {
         serviceCallbacks = callbacks;
         Log.i("location","set location callbacks");
     }
@@ -54,7 +55,7 @@ public class LocationService extends Service {
     @SuppressLint("MissingPermission")
     private void startForeground() {
         Toast.makeText(this,"service started",Toast.LENGTH_LONG).show();
-        Intent notificationIntent = new Intent(this,CreateOrder.class);
+        Intent notificationIntent = new Intent(this, CustomerDashboard.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
         startForeground(1, new NotificationCompat.Builder(this,getString(R.string.channel_id))
                 .setOngoing(true)
@@ -65,7 +66,7 @@ public class LocationService extends Service {
                 .build());
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new ShopLocationListener(this);
+        LocationListener locationListener = new MyLocationListener(this);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
     }
 
@@ -80,7 +81,4 @@ public class LocationService extends Service {
             serviceCallbacks.onExitShop();
         }
     }
-
-
-
 }

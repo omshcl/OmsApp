@@ -44,7 +44,7 @@ public class Login extends AppCompatActivity {
                 });
         textViewResult = findViewById(R.id.text_view_result);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(" http://13bf4aaf.ngrok.io/")
+                .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiCalls = retrofit.create(apiCalls.class);
@@ -81,10 +81,10 @@ public class Login extends AppCompatActivity {
 
                 // Go to createOrder page if valid
                 if (status.isValid) {
-//                    Intent createOrderIntent = new Intent(getApplicationContext(), createOrder.class);
-//                    textViewResult.setText("Success");
-//                    createOrderIntent.putExtra("Username", "user");
-//                    startActivity(createOrderIntent);
+                   Intent createOrderIntent = new Intent(getApplicationContext(), CustomerDashboard.class);
+                   textViewResult.setText("Success");
+                   createOrderIntent.putExtra("Username", "user");
+                   startActivity(createOrderIntent);
                 } else
                     textViewResult.setText("Failure");
 

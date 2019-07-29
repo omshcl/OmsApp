@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,25 +21,28 @@
             android:enabled="true"
             android:exported="true"></service>
 
-        <activity android:name=".activities.CustomerDashboard"
+        <activity android:name=".activities.CreateOrderActivity" />
+
+        <service
+            android:name=".location.LocationService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.CustomerDashboard"
             android:label="@string/title_activity_customer_dashboard"
             android:theme="@style/AppTheme.NoActionBar">
 
+        </activity>
+        <activity
+            android:name=".activities.Login"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
-        <activity android:name=".activities.Login">
-
-        </activity>
-
-
-
     </application>
 
 </manifest>

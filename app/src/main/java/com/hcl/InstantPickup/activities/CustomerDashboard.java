@@ -1,4 +1,4 @@
-package com.hcl.InstantPickup;
+package com.hcl.InstantPickup.activities;
 
 import android.os.Bundle;
 
@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.hcl.InstantPickup.R;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 

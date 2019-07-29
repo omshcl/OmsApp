@@ -1,4 +1,4 @@
-package com.hcl.omsapplication.models.login;
+package com.hcl.InstantPickup.models.login;
 
 public class loginStatus {
     public boolean isValid;

@@ -8,10 +8,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hcl.omsapplication.R;
-import com.hcl.omsapplication.models.login.loginPost;
-import com.hcl.omsapplication.models.login.loginStatus;
-import com.hcl.omsapplication.services.apiCalls;
+import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.models.login.loginPost;
+import com.hcl.InstantPickup.models.login.loginStatus;
+import com.hcl.InstantPickup.services.apiCalls;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,10 +67,10 @@ public class login extends AppCompatActivity {
 
                 // Go to createOrder page if valid
                 if (status.isValid) {
-                    Intent createOrderIntent = new Intent(getApplicationContext(), createOrder.class);
-                    textViewResult.setText("Success");
-                    createOrderIntent.putExtra("Username", "user");
-                    startActivity(createOrderIntent);
+//                    Intent createOrderIntent = new Intent(getApplicationContext(), createOrder.class);
+//                    textViewResult.setText("Success");
+//                    createOrderIntent.putExtra("Username", "user");
+//                    startActivity(createOrderIntent);
                 } else
                     textViewResult.setText("Failure");
 

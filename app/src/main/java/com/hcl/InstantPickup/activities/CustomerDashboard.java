@@ -1,4 +1,4 @@
-package com.hcl.InstantPickup;
+package com.hcl.InstantPickup.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
+import com.hcl.InstantPickup.R;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

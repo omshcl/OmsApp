@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,8 +20,8 @@
             android:name=".location.LocationService"
             android:enabled="true"
             android:exported="true"></service>
-        <activity
-            android:name=".CustomerDashboard"
+
+        <activity android:name=".activities.CustomerDashboard"
             android:label="@string/title_activity_customer_dashboard"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -30,9 +31,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login">
+
+
+
+        <activity android:name=".activities.Login">
 
         </activity>
+
+
+
     </application>
 
 </manifest>

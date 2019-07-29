@@ -16,8 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.hcl.InstantPickup.CustomerDashboard;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.activities.CustomerDashboard;
 
 public class LocationService extends Service {
 

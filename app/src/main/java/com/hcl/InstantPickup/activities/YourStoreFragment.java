@@ -19,15 +19,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hcl.InstantPickup.R;
 
 public class YourStoreFragment extends Fragment {
-    @Nullable
+  
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_your_store, null);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         //WRITE ACTIVITY CODE HERE
         // ex. view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() ....
           // Inflate the layout for this fragment
@@ -52,19 +52,12 @@ public class YourStoreFragment extends Fragment {
 
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(37.4219999, -122.0862462))
-                        .title("Spider Man"));
+                        .title("Our Store")
+                        .snippet("Grocery store: Frisco location "));
 
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(37.4629101,-122.2449094))
-                        .title("Iron Man")
-                        .snippet("His Talent : Plenty of money"));
-
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(37.3092293,-122.1136845))
-                        .title("Captain America"));
             }
         });
-        
+
         return rootView;
     }
 }

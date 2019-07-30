@@ -23,7 +23,6 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
-import com.hcl.InstantPickup.MapFragment;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;

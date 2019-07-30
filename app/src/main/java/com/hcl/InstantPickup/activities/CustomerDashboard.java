@@ -2,8 +2,6 @@ package com.hcl.InstantPickup.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -133,8 +131,7 @@ public class CustomerDashboard extends AppCompatActivity
             fragmentTransaction.replace(R.id.screen_area, fragment);
             fragmentTransaction.commit();
         }
-
-        }
+        
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

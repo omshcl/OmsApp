@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-public class MyLocationListener implements LocationListener {
+import com.hcl.InstantPickup.ShopLocation;
+
+public class MyLocationListener implements LocationListener, ShopLocation {
 
     private Context mContext;
     private static final double R = 6372.8; // In kilometers
@@ -22,7 +24,7 @@ public class MyLocationListener implements LocationListener {
     public void onLocationChanged(Location location) {
         double latitude= location.getLatitude();
         double longitude = location.getLatitude();
-        double distance = haversine(33.09948150944979, -96.8288957057522, latitude, longitude);
+        double distance = haversine(myShopLat, myShopLong, latitude, longitude);
 
         if(distance < 0.10) {
             ((LocationService)mContext).enteredShop();

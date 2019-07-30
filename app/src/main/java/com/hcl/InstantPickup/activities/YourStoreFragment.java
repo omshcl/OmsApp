@@ -42,7 +42,7 @@ public class YourStoreFragment extends Fragment implements ShopLocation {
                 LatLng shopLatLng = new LatLng(myShopLat,myShopLong);
                 CameraPosition googlePlex = CameraPosition.builder()
                         .target(shopLatLng)
-                        .zoom(10)
+                        .zoom(14)
                         .bearing(0)
                         .tilt(45)
                         .build();

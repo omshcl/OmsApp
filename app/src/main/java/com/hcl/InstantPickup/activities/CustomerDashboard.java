@@ -2,6 +2,8 @@ package com.hcl.InstantPickup.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -10,6 +12,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import android.os.IBinder;
@@ -23,6 +33,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.location.MapsActivity;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,8 +47,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class CustomerDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback, OnMapReadyCallback {
 
+    private GoogleMap mMap;
 
 
     @Override
@@ -64,6 +76,7 @@ public class CustomerDashboard extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         createNotificationChannel();
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
     }
 
     @Override
@@ -121,12 +134,11 @@ public class CustomerDashboard extends AppCompatActivity
             fragmentTransaction.commit();
         }
 
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
         private LocationService locationService;
         private boolean bound = false;
@@ -202,5 +214,19 @@ public class CustomerDashboard extends AppCompatActivity
 
         }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(33.09948150944979, -96.8288957057522151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Our shop"));
+        CameraPosition cameraPosition = new CameraPosition.Builder().
+                target(sydney).
+                zoom(10 ).
+                bearing(0).
+                build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
 
 }

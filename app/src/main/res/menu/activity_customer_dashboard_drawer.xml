@@ -9,11 +9,11 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_order"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Create Order" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Map " />
         <item

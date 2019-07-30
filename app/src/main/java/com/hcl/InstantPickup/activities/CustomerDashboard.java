@@ -2,10 +2,7 @@ package com.hcl.InstantPickup.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-<<<<<<< HEAD
-=======
 import androidx.fragment.app.Fragment;
->>>>>>> 8421929a8c53805c006fe08f101d00dc39a3129f
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -127,11 +124,6 @@ public class CustomerDashboard extends AppCompatActivity
             fragmentTransaction.replace(R.id.screen_area, fragment);
             fragmentTransaction.commit();
         }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 8421929a8c53805c006fe08f101d00dc39a3129f
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class CustomerDashboard extends AppCompatActivity
@@ -116,23 +117,13 @@ public class CustomerDashboard extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_map) {
 
-
-
-
-
         } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
         private LocationService locationService;
         private boolean bound = false;

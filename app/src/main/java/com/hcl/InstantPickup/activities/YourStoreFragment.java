@@ -47,7 +47,7 @@ public class YourStoreFragment extends Fragment implements ShopLocation {
                         .tilt(45)
                         .build();
 
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10000, null);
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 2000, null);
 
                 mMap.addMarker(new MarkerOptions()
                         .position(shopLatLng)

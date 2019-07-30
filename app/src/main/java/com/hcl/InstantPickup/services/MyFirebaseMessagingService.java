@@ -21,6 +21,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Display API token so we can send cloud messages to the app
         Log.e("Firebase Token",token);
     }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e("MFMS","onMessageReceived");

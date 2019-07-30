@@ -40,8 +40,6 @@
             android:exported="true" />
 
 
-        <activity android:name=".activities.CreateOrderActivity" />
-
         <service
             android:name=".location.LocationService"
             android:enabled="true"

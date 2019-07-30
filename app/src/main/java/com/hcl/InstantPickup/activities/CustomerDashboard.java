@@ -124,7 +124,6 @@ public class CustomerDashboard extends AppCompatActivity
             fragmentTransaction.replace(R.id.screen_area, fragment);
             fragmentTransaction.commit();
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

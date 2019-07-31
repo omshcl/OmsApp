@@ -26,6 +26,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.models.GetOrders;
+import com.hcl.InstantPickup.models.Username;
+import com.hcl.InstantPickup.models.login.loginPost;
+import com.hcl.InstantPickup.models.login.loginStatus;
+import com.hcl.InstantPickup.services.apiCalls;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,9 +41,16 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.Toast;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback,FragmentAcitivityConstants{
 
+    private com.hcl.InstantPickup.services.apiCalls apiCalls;
     private GoogleMap mMap;
     private int currentFragment;
 
@@ -64,6 +76,46 @@ public class CustomerDashboard extends AppCompatActivity
         createNotificationChannel();
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(" http://6a9021c1.ngrok.io/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiCalls = retrofit.create(apiCalls.class);
+
+        getOrders();
+    }
+
+    private void getOrders(){
+
+        final Username username = new Username("pat_abh");
+
+        // Make POST request to /Login
+        Call<GetOrders> call = apiCalls.getOrders(username);
+
+        // Async callback and waits for response
+        call.enqueue(new Callback<GetOrders>() {
+            @Override
+            public void onResponse(Call<GetOrders> call, Response<GetOrders> response) {
+
+                if (!response.isSuccessful()) {
+//                    textViewResult.setText("Code: " + response.code());
+                    System.out.println("Code: " + response.code());
+                    return;
+                }
+
+                // Request is successful
+                GetOrders orders = response.body();
+
+                System.out.println(orders.orders);
+
+            }
+
+            @Override
+            public void onFailure(Call<GetOrders> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                System.out.println(t.getMessage());
+            }
+        });
     }
 
     @Override

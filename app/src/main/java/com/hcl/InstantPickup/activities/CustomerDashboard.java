@@ -85,7 +85,7 @@ public class CustomerDashboard extends AppCompatActivity
                 .build();
         apiCalls = retrofit.create(apiCalls.class);
 
-        getOrders();
+//        getOrders();
     }
 
     private void getOrders(){

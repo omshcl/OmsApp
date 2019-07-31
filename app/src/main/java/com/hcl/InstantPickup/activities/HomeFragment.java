@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
                 .build();
         apiCalls = retrofit.create(com.hcl.InstantPickup.services.apiCalls.class);
 
-        getOrders();
+//        getOrders();
     }
 
     private void getOrders(){

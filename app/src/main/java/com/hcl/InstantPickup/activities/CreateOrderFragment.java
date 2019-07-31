@@ -1,5 +1,6 @@
 package com.hcl.InstantPickup.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.login.createOrderStatus;
+import com.hcl.InstantPickup.models.createOrder.createOrderStatus;
 import com.hcl.InstantPickup.services.apiCalls;
 
 import retrofit2.Call;
@@ -32,7 +33,7 @@ public class CreateOrderFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        Intent intent = new Intent(view.getContext(), CustomerDashboard.class);
         super.onViewCreated(view, savedInstanceState);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/")

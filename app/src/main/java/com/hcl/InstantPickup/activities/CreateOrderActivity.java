@@ -60,6 +60,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                         if (status.success) {
                             Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_LONG).show();
 
+
                         } else
                             Toast.makeText(getApplicationContext(),"Failed to place order",Toast.LENGTH_LONG).show();
                     }

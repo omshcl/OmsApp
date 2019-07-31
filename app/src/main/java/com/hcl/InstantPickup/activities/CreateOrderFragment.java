@@ -1,5 +1,6 @@
 package com.hcl.InstantPickup.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,10 +45,10 @@ public class CreateOrderFragment extends Fragment {
         apiCalls = retrofit.create(apiCalls.class);
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
 
-                JsonObject paramObject = createOrderForm();
+                final JsonObject paramObject = createOrderForm();
 
                 Call<createOrderStatus> call = apiCalls.createOrderPost(paramObject);
 
@@ -62,7 +65,20 @@ public class CreateOrderFragment extends Fragment {
                         createOrderStatus status = response.body();
 
                         if (status.success) {
+
                             Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_LONG).show();
+                            HomeFragment homefragment = new HomeFragment();
+                            Bundle b = new Bundle();
+                            b.putString("address", paramObject.get("address").getAsString());
+                            b.putString("shipnode",paramObject.get("shipnode").getAsString());
+                            b.putString("total",paramObject.get("total").getAsString());
+                            homefragment.setArguments(b);
+
+                            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), homefragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
 
                         } else
                             Toast.makeText(getActivity(),"Failed to place order",Toast.LENGTH_LONG).show();

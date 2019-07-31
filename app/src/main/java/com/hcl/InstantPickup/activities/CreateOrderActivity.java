@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.login.createOrderStatus;
+import com.hcl.InstantPickup.models.createOrder.createOrderStatus;
 import com.hcl.InstantPickup.services.apiCalls;
 
 import retrofit2.Call;

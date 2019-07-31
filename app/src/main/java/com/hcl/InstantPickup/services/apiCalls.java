@@ -1,5 +1,6 @@
 package com.hcl.InstantPickup.services;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 //import com.hcl.InstantPickup.models.createOrder.createOrderStatus;
 import com.hcl.InstantPickup.models.GetOrders;
@@ -21,5 +22,5 @@ public interface apiCalls {
     Call<createOrderStatus> createOrderPost(@Body JsonObject createOrder);
 
     @POST("orders/customer_orders")
-    Call<GetOrders> getOrders(@Body Username username);
+    Call<JsonArray> getOrders(@Body JsonObject username);
 }

@@ -23,6 +23,8 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
@@ -40,6 +42,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,15 +91,15 @@ public class CustomerDashboard extends AppCompatActivity
 
     private void getOrders(){
 
-        final Username username = new Username("pat_abh");
-
+        JsonObject username = new JsonObject();
+        username.addProperty("username", "pat_abh");
         // Make POST request to /Login
-        Call<GetOrders> call = apiCalls.getOrders(username);
+        Call<JsonArray> call = apiCalls.getOrders(username);
 
         // Async callback and waits for response
-        call.enqueue(new Callback<GetOrders>() {
+        call.enqueue(new Callback<JsonArray>() {
             @Override
-            public void onResponse(Call<GetOrders> call, Response<GetOrders> response) {
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
                 if (!response.isSuccessful()) {
 //                    textViewResult.setText("Code: " + response.code());
@@ -104,14 +108,20 @@ public class CustomerDashboard extends AppCompatActivity
                 }
 
                 // Request is successful
-                GetOrders orders = response.body();
+                JsonArray orders = response.body();
+                for(int i=0;i<orders.size();i++) {
+                    JsonObject order = orders.get(i).getAsJsonObject();
+                    String demand_type = order.get("demand_type").toString();
+                    String total = order.get("total").toString();
+                    String order_id = order.get("id").toString();
 
-                System.out.println(orders.orders);
+
+                }
 
             }
 
             @Override
-            public void onFailure(Call<GetOrders> call, Throwable t) {
+            public void onFailure(Call<JsonArray> call, Throwable t) {
 //                textViewResult.setText(t.getMessage());
                 System.out.println(t.getMessage());
             }

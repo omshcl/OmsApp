@@ -5,11 +5,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.hcl.InstantPickup.ShopLocation;
-
-public class MyLocationListener implements LocationListener, ShopLocation {
+public class MyLocationListener implements LocationListener, LocationConstants {
 
     private Context mContext;
     private static final double R = 6372.8; // In kilometers
@@ -25,15 +22,11 @@ public class MyLocationListener implements LocationListener, ShopLocation {
         double latitude= location.getLatitude();
         double longitude = location.getLatitude();
         double distance = haversine(myShopLat, myShopLong, latitude, longitude);
-
-        if(distance < 0.10) {
+        if(distance < geoFenceRange) {
             ((LocationService)mContext).enteredShop();
         } else {
             ((LocationService)mContext).exitShop();
         }
-        Log.v("location", "longitude" + longitude);
-        Log.v("location", "latitude" + latitude);
-        Log.i("location","distance: " + distance);
     }
 
     private static double haversine(double lat1, double lon1, double lat2, double lon2) {
@@ -41,11 +34,11 @@ public class MyLocationListener implements LocationListener, ShopLocation {
         double dLon = Math.toRadians(lon2 - lon1);
         lat1 = Math.toRadians(lat1);
         lat2 = Math.toRadians(lat2);
-
         double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
         double c = 2 * Math.asin(Math.sqrt(a));
         return R * c;
     }
+
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 

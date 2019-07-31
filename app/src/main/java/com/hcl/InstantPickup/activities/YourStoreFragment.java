@@ -15,9 +15,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.ShopLocation;
+import com.hcl.InstantPickup.location.LocationConstants;
 
-public class YourStoreFragment extends Fragment implements ShopLocation {
+public class YourStoreFragment extends Fragment implements LocationConstants {
   
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,9 +27,6 @@ public class YourStoreFragment extends Fragment implements ShopLocation {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //WRITE ACTIVITY CODE HERE
-        // ex. view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() ....
-          // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frg);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
@@ -39,24 +36,21 @@ public class YourStoreFragment extends Fragment implements ShopLocation {
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
                 mMap.clear(); //clear old markers
-                LatLng shopLatLng = new LatLng(myShopLat,myShopLong);
                 CameraPosition googlePlex = CameraPosition.builder()
                         .target(shopLatLng)
-                        .zoom(14)
-                        .bearing(0)
-                        .tilt(45)
+                        .zoom(shopZoomLevel)
+                        .bearing(shopBearing)
+                        .tilt(shopTilt)
                         .build();
 
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 2000, null);
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), shopAnimationTime, null);
 
                 mMap.addMarker(new MarkerOptions()
                         .position(shopLatLng)
-                        .title("Our Store")
+                        .title(shopIconTitle)
                         .snippet(getString(R.string.store_name)+": Frisco location "));
-
             }
         });
-
         return rootView;
     }
 }

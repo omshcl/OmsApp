@@ -56,6 +56,7 @@ public class LocationService extends Service {
     private void startForeground() {
         Toast.makeText(this,"service started",Toast.LENGTH_LONG).show();
         Intent notificationIntent = new Intent(this, CustomerDashboard.class);
+        notificationIntent.setAction("action");
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
         startForeground(1, new NotificationCompat.Builder(this,getString(R.string.channel_id))
                 .setOngoing(true)
@@ -63,11 +64,12 @@ public class LocationService extends Service {
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText("Service is running in the background")
                 .setContentIntent(pendingIntent)
+                .addAction(R.drawable.googleg_disabled_color_18,"Cancel Pickup",pendingIntent)
                 .build());
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new MyLocationListener(this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, locationListener);
     }
 
     public void enteredShop() {

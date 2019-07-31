@@ -26,6 +26,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.models.GetOrders;
+import com.hcl.InstantPickup.models.Username;
+import com.hcl.InstantPickup.models.login.loginPost;
+import com.hcl.InstantPickup.models.login.loginStatus;
+import com.hcl.InstantPickup.services.apiCalls;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,26 +41,26 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.Toast;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class CustomerDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback,FragmentAcitivityConstants{
 
+    private com.hcl.InstantPickup.services.apiCalls apiCalls;
     private GoogleMap mMap;
-
+    private int currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_customer_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_home));
@@ -63,10 +68,54 @@ public class CustomerDashboard extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        if(savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt("activeFragment", HomeFragmentId);
+            switchFragment(currentFragment);
+        }
         navigationView.setNavigationItemSelectedListener(this);
         createNotificationChannel();
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(" http://6a9021c1.ngrok.io/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiCalls = retrofit.create(apiCalls.class);
+
+        getOrders();
+    }
+
+    private void getOrders(){
+
+        final Username username = new Username("pat_abh");
+
+        // Make POST request to /Login
+        Call<GetOrders> call = apiCalls.getOrders(username);
+
+        // Async callback and waits for response
+        call.enqueue(new Callback<GetOrders>() {
+            @Override
+            public void onResponse(Call<GetOrders> call, Response<GetOrders> response) {
+
+                if (!response.isSuccessful()) {
+//                    textViewResult.setText("Code: " + response.code());
+                    System.out.println("Code: " + response.code());
+                    return;
+                }
+
+                // Request is successful
+                GetOrders orders = response.body();
+
+                System.out.println(orders.orders);
+
+            }
+
+            @Override
+            public void onFailure(Call<GetOrders> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                System.out.println(t.getMessage());
+            }
+        });
     }
 
     @Override
@@ -101,19 +150,15 @@ public class CustomerDashboard extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    private void switchFragment(int fragmentID) {
         Fragment fragment = null;
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
+        currentFragment = fragmentID;
+        if (fragmentID == HomeFragmentId) {
             fragment = new HomeFragment();
-        } else if (id == R.id.nav_createorder) {
+        } else if (fragmentID == CreateOrderFragmentId) {
             fragment = new CreateOrderFragment();
         }
-        else if (id == R.id.nav_yourstore) {
+        else if (fragmentID == YourShopFragmentId){
             fragment = new YourStoreFragment();
         }
 
@@ -123,6 +168,24 @@ public class CustomerDashboard extends AppCompatActivity
             fragmentTransaction.replace(R.id.screen_area, fragment);
             fragmentTransaction.commit();
         }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        Fragment fragment = null;
+        int id = item.getItemId();
+        int fragmentId = HomeFragmentId;
+        if (id == R.id.nav_home) {
+            fragmentId = HomeFragmentId;
+        } else if (id == R.id.nav_createorder) {
+            fragmentId = CreateOrderFragmentId;
+        }
+        else if (id == R.id.nav_yourstore) {
+            fragmentId = YourShopFragmentId;
+        }
+        switchFragment(fragmentId);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -135,6 +198,12 @@ public class CustomerDashboard extends AppCompatActivity
         @Override
         protected  void onStart() {
             super.onStart();
+        }
+
+        @Override
+        protected void onSaveInstanceState(Bundle savedInstanceState) {
+            super.onSaveInstanceState(savedInstanceState);
+            savedInstanceState.putInt("activeFragment",currentFragment);
         }
 
         @Override
@@ -168,7 +237,6 @@ public class CustomerDashboard extends AppCompatActivity
         public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
             Intent newIntent = new Intent(this, LocationService.class);
             startService(newIntent);
-
             Intent intent = new Intent(this,LocationService.class);
             bindService(intent,locationServiceConnection, Context.BIND_AUTO_CREATE);
             Log.i("location","bound location services");

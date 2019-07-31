@@ -1,4 +1,4 @@
-package com.hcl.InstantPickup.models.login;
+package com.hcl.InstantPickup.models.createOrder;
 
 public class createOrderStatus {
     public boolean success;

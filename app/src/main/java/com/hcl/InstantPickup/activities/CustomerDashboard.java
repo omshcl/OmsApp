@@ -37,25 +37,18 @@ import android.view.Menu;
 import android.widget.Toast;
 
 public class CustomerDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback,FragmentAcitivityConstants{
 
     private GoogleMap mMap;
-
+    private int currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_customer_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_home));
@@ -63,6 +56,10 @@ public class CustomerDashboard extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        if(savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt("activeFragment", HomeFragmentId);
+            switchFragment(currentFragment);
+        }
         navigationView.setNavigationItemSelectedListener(this);
         createNotificationChannel();
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -101,19 +98,15 @@ public class CustomerDashboard extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    private void switchFragment(int fragmentID) {
         Fragment fragment = null;
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
+        currentFragment = fragmentID;
+        if (fragmentID == HomeFragmentId) {
             fragment = new HomeFragment();
-        } else if (id == R.id.nav_createorder) {
+        } else if (fragmentID == CreateOrderFragmentId) {
             fragment = new CreateOrderFragment();
         }
-        else if (id == R.id.nav_yourstore) {
+        else if (fragmentID == YourShopFragmentId){
             fragment = new YourStoreFragment();
         }
 
@@ -123,6 +116,24 @@ public class CustomerDashboard extends AppCompatActivity
             fragmentTransaction.replace(R.id.screen_area, fragment);
             fragmentTransaction.commit();
         }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        Fragment fragment = null;
+        int id = item.getItemId();
+        int fragmentId = HomeFragmentId;
+        if (id == R.id.nav_home) {
+            fragmentId = HomeFragmentId;
+        } else if (id == R.id.nav_createorder) {
+            fragmentId = CreateOrderFragmentId;
+        }
+        else if (id == R.id.nav_yourstore) {
+            fragmentId = YourShopFragmentId;
+        }
+        switchFragment(fragmentId);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -135,6 +146,12 @@ public class CustomerDashboard extends AppCompatActivity
         @Override
         protected  void onStart() {
             super.onStart();
+        }
+
+        @Override
+        protected void onSaveInstanceState(Bundle savedInstanceState) {
+            super.onSaveInstanceState(savedInstanceState);
+            savedInstanceState.putInt("activeFragment",currentFragment);
         }
 
         @Override
@@ -168,7 +185,6 @@ public class CustomerDashboard extends AppCompatActivity
         public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
             Intent newIntent = new Intent(this, LocationService.class);
             startService(newIntent);
-
             Intent intent = new Intent(this,LocationService.class);
             bindService(intent,locationServiceConnection, Context.BIND_AUTO_CREATE);
             Log.i("location","bound location services");

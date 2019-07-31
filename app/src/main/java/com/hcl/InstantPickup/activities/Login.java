@@ -3,6 +3,7 @@ package com.hcl.InstantPickup.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,7 +29,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Login extends AppCompatActivity {
     private com.hcl.InstantPickup.services.apiCalls apiCalls;
-    private TextView textViewResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,8 @@ public class Login extends AppCompatActivity {
                         Log.e("API Key", token);
                     }
                 });
-        textViewResult = findViewById(R.id.text_view_result);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(getString(R.string.backend_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiCalls = retrofit.create(apiCalls.class);
@@ -72,7 +71,9 @@ public class Login extends AppCompatActivity {
             public void onResponse(Call<loginStatus> call, Response<loginStatus> response) {
 
                 if (!response.isSuccessful()) {
-                    textViewResult.setText("Code: " + response.code());
+                    Toast toast = Toast.makeText(Login.this, "Response Error", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
                     return;
                 }
 
@@ -81,18 +82,25 @@ public class Login extends AppCompatActivity {
 
                 // Go to createOrder page if valid
                 if (status.isValid) {
-                   Intent createOrderIntent = new Intent(getApplicationContext(), CustomerDashboard.class);
-                   textViewResult.setText("Success");
-                   createOrderIntent.putExtra("Username", "user");
-                   startActivity(createOrderIntent);
-                } else
-                    textViewResult.setText("Failure");
+                    Intent createOrderIntent = new Intent(getApplicationContext(), CustomerDashboard.class);
+                    Toast toast = Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
+                    createOrderIntent.putExtra("Username", "user");
+                    startActivity(createOrderIntent);
+                } else {
+                    Toast toast = Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
+                }
 
             }
 
             @Override
             public void onFailure(Call<loginStatus> call, Throwable t) {
-                textViewResult.setText(t.getMessage());
+                Toast toast = Toast.makeText(Login.this, t.getMessage(), Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
             }
         });
     }

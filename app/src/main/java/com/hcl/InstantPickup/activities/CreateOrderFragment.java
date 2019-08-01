@@ -22,10 +22,13 @@ import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
+import com.hcl.InstantPickup.models.createOrder.Item;
 import com.hcl.InstantPickup.services.ApiCalls;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +38,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreateOrderFragment extends Fragment implements OnItemSelectedListener {
     ApiCalls apiCalls;
+    Map<String, Item> itemMap;
+    Spinner spinner;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,21 +56,7 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
                 .build();
 
         apiCalls = retrofit.create(ApiCalls.class);
-
-        Spinner spinner = (Spinner) view.findViewById(R.id.itemSpinner);
-        // Spinner click listener
-        spinner.setOnItemSelectedListener(this);
-
-        // Spinner Drop down elements
-        List<String> items = getItems();
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, items);
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-
+        getItems(view);
 
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +111,7 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
 
     }
 
-    private List<String> getItems() {
+    private void getItems(final View view) {
         Call<JsonArray> call = apiCalls.getItems();
         call.enqueue(new Callback<JsonArray>() {
             @Override
@@ -130,16 +121,18 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
                     return;
                 }
                 // Request is successful
-                JsonArray itemList = response.body();
-                for(int i=0;i<itemList.size();i++) {
-                    JsonObject order = itemList.get(i).getAsJsonObject();
-                    String demand_type = order.get("demand_type").toString();
-                    String total = order.get("total").toString();
-                    String order_id = order.get("id").toString();
-
-
+                itemMap = new HashMap<>();
+                JsonArray items = response.body();
+                for(int i=0;i<items.size();i++) {
+                    JsonObject curItem = items.get(i).getAsJsonObject();
+                    int id = curItem.get("itemid").getAsInt();
+                    String shortDescription = curItem.get("shortdescription").getAsString();
+                    String longDescription = curItem.get("itemdescription").getAsString();
+                    int price = curItem.get("price").getAsInt();
+                    System.out.println(id + shortDescription + longDescription + price);
+                    itemMap.put(shortDescription, new Item(id, shortDescription, longDescription, price));
                 }
-
+                createSpinner(view);
             }
 
             @Override
@@ -148,7 +141,23 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
                 System.out.println(t.getMessage());
             }
         });
-        return null;
+    }
+
+    private void createSpinner(View view) {
+        spinner = (Spinner) view.findViewById(R.id.itemSpinner);
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+        // Spinner Drop down elements
+        List<String> items = new ArrayList<>();
+        for(String key : itemMap.keySet()) {
+            items.add(key);
+        }
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, items);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
     }
 
     private JsonObject createOrderForm() {

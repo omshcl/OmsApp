@@ -12,4 +12,20 @@ public class Item {
         this.longDescription = longDescription;
         this.price = price;
     }
+
+    public int getID() {
+        return this.id;
+    }
+
+    public String getShortDescription() {
+        return this.shortDescription;
+    }
+
+    public String getLongDescription() {
+        return this.getLongDescription();
+    }
+
+    public int getPrice() {
+        return this.price;
+    }
 }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Create Order"
+        android:text="Create Pickup Order"
         android:textSize="30sp" />
     <TextView
         android:id="@+id/selectItem"
@@ -67,6 +67,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="115dp" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/itemSpinner"
+        android:layout_marginTop="30dp" />
 
 
 </RelativeLayout>

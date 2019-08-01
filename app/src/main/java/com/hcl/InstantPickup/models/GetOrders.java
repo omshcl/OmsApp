@@ -1,11 +1,12 @@
 package com.hcl.InstantPickup.models;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class GetOrders {
-    public JsonArray orders;
+    public JsonObject orders;
 
-    public GetOrders(JsonArray orders){
+    public GetOrders(JsonObject orders){
         this.orders = orders;
     }
 }

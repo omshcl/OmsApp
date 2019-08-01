@@ -10,8 +10,8 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.createOrder.createOrderStatus;
-import com.hcl.InstantPickup.services.apiCalls;
+import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
+import com.hcl.InstantPickup.services.ApiCalls;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,56 +21,52 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreateOrderActivity extends AppCompatActivity {
 
-
-
-
-    private apiCalls apiCalls;
+    private ApiCalls apiCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(R.layout.activity_create_order);
+        //  setContentView(R.layout.activity_create_order);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(getString(R.string.backend_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        apiCalls = retrofit.create(apiCalls.class);
+        apiCalls = retrofit.create(ApiCalls.class);
         Button startLocation = (Button) findViewById(R.id.createOrderButton);
         startLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
                 JsonObject paramObject = createOrderForm();
 
-                Call<createOrderStatus> call = apiCalls.createOrderPost(paramObject);
+                Call<CreateOrderStatus> call = apiCalls.createOrderPost(paramObject);
 
 
-                call.enqueue(new Callback<createOrderStatus>() {
+                call.enqueue(new Callback<CreateOrderStatus>() {
                     @Override
-                    public void onResponse(Call<createOrderStatus> call, Response<createOrderStatus> response) {
+                    public void onResponse(Call<CreateOrderStatus> call, Response<CreateOrderStatus> response) {
                         System.out.println(response);
                         if (!response.isSuccessful()) {
 
                             return;
                         }
 
-                        createOrderStatus status = response.body();
+                        CreateOrderStatus status = response.body();
 
                         if (status.success) {
-                            Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_LONG).show();
 
 
                         } else
-                            Toast.makeText(getApplicationContext(),"Failed to place order",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Failed to place order", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
-                    public void onFailure(Call<createOrderStatus> call, Throwable t) {
+                    public void onFailure(Call<CreateOrderStatus> call, Throwable t) {
 
                     }
 
-                });;
+                });
             }
         });
 
@@ -117,9 +113,6 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         return paramObject;
     }
-
-
-
 
 
 }

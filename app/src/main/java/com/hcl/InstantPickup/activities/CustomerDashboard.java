@@ -13,24 +13,21 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.GetOrders;
-import com.hcl.InstantPickup.models.Username;
-import com.hcl.InstantPickup.models.login.loginPost;
-import com.hcl.InstantPickup.models.login.loginStatus;
-import com.hcl.InstantPickup.services.apiCalls;
+import com.hcl.InstantPickup.services.ApiCalls;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,7 +47,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback,FragmentAcitivityConstants{
 
-    private com.hcl.InstantPickup.services.apiCalls apiCalls;
+    private ApiCalls apiCalls;
     private GoogleMap mMap;
     private int currentFragment;
 
@@ -77,25 +74,25 @@ public class CustomerDashboard extends AppCompatActivity
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(" http://6a9021c1.ngrok.io/")
+                .baseUrl(getString(R.string.backend_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        apiCalls = retrofit.create(apiCalls.class);
+        apiCalls = retrofit.create(ApiCalls.class);
 
 //        getOrders();
     }
 
     private void getOrders(){
 
-        final Username username = new Username("pat_abh");
+        JsonObject username = new JsonObject();
+        username.addProperty("username", "pat_abh");
 
-        // Make POST request to /Login
-        Call<GetOrders> call = apiCalls.getOrders(username);
+        Call<JsonArray> call = apiCalls.getOrders(username);
 
         // Async callback and waits for response
-        call.enqueue(new Callback<GetOrders>() {
+        call.enqueue(new Callback<JsonArray>() {
             @Override
-            public void onResponse(Call<GetOrders> call, Response<GetOrders> response) {
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
                 if (!response.isSuccessful()) {
 //                    textViewResult.setText("Code: " + response.code());
@@ -104,14 +101,20 @@ public class CustomerDashboard extends AppCompatActivity
                 }
 
                 // Request is successful
-                GetOrders orders = response.body();
+                JsonArray orders = response.body();
+                for(int i=0;i<orders.size();i++) {
+                    JsonObject order = orders.get(i).getAsJsonObject();
+                    String demand_type = order.get("demand_type").toString();
+                    String total = order.get("total").toString();
+                    String order_id = order.get("id").toString();
 
-                System.out.println(orders.orders);
+
+                }
 
             }
 
             @Override
-            public void onFailure(Call<GetOrders> call, Throwable t) {
+            public void onFailure(Call<JsonArray> call, Throwable t) {
 //                textViewResult.setText(t.getMessage());
                 System.out.println(t.getMessage());
             }

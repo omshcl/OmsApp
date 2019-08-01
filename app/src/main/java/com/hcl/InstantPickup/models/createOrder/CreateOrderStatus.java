@@ -1,9 +1,9 @@
 package com.hcl.InstantPickup.models.createOrder;
 
-public class createOrderStatus {
+public class CreateOrderStatus {
     public boolean success;
 
-    public createOrderStatus(Boolean success){
+    public CreateOrderStatus(Boolean success){
         this.success = success;
     }
 }

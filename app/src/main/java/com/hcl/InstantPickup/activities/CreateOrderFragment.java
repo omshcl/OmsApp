@@ -2,10 +2,15 @@ package com.hcl.InstantPickup.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,13 +23,16 @@ import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.services.ApiCalls;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CreateOrderFragment extends Fragment {
+public class CreateOrderFragment extends Fragment implements OnItemSelectedListener {
     ApiCalls apiCalls;
     @Nullable
     @Override
@@ -42,6 +50,22 @@ public class CreateOrderFragment extends Fragment {
                 .build();
 
         apiCalls = retrofit.create(ApiCalls.class);
+
+        Spinner spinner = (Spinner) view.findViewById(R.id.itemSpinner);
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> items = getItems();
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, items);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+
+
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -95,6 +119,37 @@ public class CreateOrderFragment extends Fragment {
 
     }
 
+    private List<String> getItems() {
+        Call<JsonArray> call = apiCalls.getItems();
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("COF:getItems","Response Code"+response.code());
+                    return;
+                }
+                // Request is successful
+                JsonArray itemList = response.body();
+                for(int i=0;i<itemList.size();i++) {
+                    JsonObject order = itemList.get(i).getAsJsonObject();
+                    String demand_type = order.get("demand_type").toString();
+                    String total = order.get("total").toString();
+                    String order_id = order.get("id").toString();
+
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                System.out.println(t.getMessage());
+            }
+        });
+        return null;
+    }
+
     private JsonObject createOrderForm() {
         JsonObject paramObject = new JsonObject();
         JsonObject items = new JsonObject();
@@ -136,5 +191,18 @@ public class CreateOrderFragment extends Fragment {
         return paramObject;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        // On selecting a spinner item
+        String item = adapterView.getItemAtPosition(i).toString();
+
+        // Showing selected spinner item
+        Toast.makeText(adapterView.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+}
 

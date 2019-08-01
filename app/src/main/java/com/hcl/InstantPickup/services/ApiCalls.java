@@ -9,6 +9,7 @@ import com.hcl.InstantPickup.models.login.LoginStatus;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiCalls {
@@ -21,4 +22,7 @@ public interface ApiCalls {
 
     @POST("orders/customer_orders")
     Call<JsonArray> getOrders(@Body JsonObject username);
+
+    @GET("items/list")
+    Call<JsonArray> getItems();
 }

@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity {
         loginPost(user, pass);
     }
 
-    private void loginPost(String user, String pass) {
+    private void loginPost(final String user, String pass) {
 
         // Create an instance of model class LoginPost
         final LoginPost login = new LoginPost(user, pass);
@@ -81,12 +81,15 @@ public class Login extends AppCompatActivity {
 
                 // Go to createOrder page if valid
                 if (status.isValid) {
+                    EditText username = (EditText) findViewById(R.id.username);
+                    System.out.println(username.getText().toString());
                     Intent createOrderIntent = new Intent(getApplicationContext(), CustomerDashboard.class);
+                    createOrderIntent.putExtra("Username", username.getText().toString());
+                    startActivity(createOrderIntent);
                     Toast toast = Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                     toast.show();
-                    createOrderIntent.putExtra("Username", "user");
-                    startActivity(createOrderIntent);
+
                 } else {
                     Toast toast = Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);

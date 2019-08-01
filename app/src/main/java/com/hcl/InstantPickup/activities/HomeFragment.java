@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.services.ApiCalls;
 
 import retrofit2.Call;
@@ -43,6 +44,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final String username=SingletonClass.getInstance().getName();
+        TextView textView=(TextView)view.findViewById(R.id.textHomeWelcome);
+
+        textView.setText("Welcome"+" "+username);
         view.setVisibility(View.GONE);
         final Bundle bundle=this.getArguments();
         if(bundle!=null) {
@@ -58,7 +63,7 @@ public class HomeFragment extends Fragment {
                             .build();
                     apiCalls = retrofit.create(ApiCalls.class);
 
-                    getOrders();
+                    getOrders(username);
                 }
             });
         }
@@ -68,10 +73,10 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void getOrders(){
+    private void getOrders(String name){
 
         final JsonObject username = new JsonObject();
-        username.addProperty("username", "pat_abh");
+        username.addProperty("username", name);
 
         // Make POST request to /Login
         Call<JsonArray> call = apiCalls.getOrders(username);

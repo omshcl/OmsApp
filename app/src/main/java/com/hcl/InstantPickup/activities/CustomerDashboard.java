@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.services.ApiCalls;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -56,6 +57,11 @@ public class CustomerDashboard extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_customer_dashboard);
+        Intent i=getIntent();
+        String username=i.getStringExtra("Username");
+        System.out.println(username);
+        SingletonClass.getInstance().setName(username);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -79,13 +85,13 @@ public class CustomerDashboard extends AppCompatActivity
                 .build();
         apiCalls = retrofit.create(ApiCalls.class);
 
-//        getOrders();
+       getOrders(username);
     }
 
-    private void getOrders(){
+    private void getOrders(String name){
 
         JsonObject username = new JsonObject();
-        username.addProperty("username", "pat_abh");
+        username.addProperty("username", name);
 
         Call<JsonArray> call = apiCalls.getOrders(username);
 

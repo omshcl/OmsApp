@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.services.ApiCalls;
 
@@ -151,6 +152,7 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
     }
 
     private JsonObject createOrderForm() {
+        String s= SingletonClass.getInstance().getName();
         JsonObject paramObject = new JsonObject();
         JsonObject items = new JsonObject();
         JsonObject quantity = new JsonObject();
@@ -172,7 +174,7 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
         paramObject.addProperty("address", "123 Main St");
         paramObject.addProperty("channel", "asasas");
         paramObject.addProperty("city", "Frisco");
-        paramObject.addProperty("username", "pat_abh");
+        paramObject.addProperty("username", s);
         paramObject.addProperty("date", "2019-07-23T18:12:48.422Z");
         paramObject.addProperty("firstname", "Abhi");
         paramObject.add("items", itemList);

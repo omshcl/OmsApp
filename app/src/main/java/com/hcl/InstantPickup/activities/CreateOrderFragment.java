@@ -10,14 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.createOrder.createOrderStatus;
-import com.hcl.InstantPickup.services.apiCalls;
+import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
+import com.hcl.InstantPickup.services.ApiCalls;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,7 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreateOrderFragment extends Fragment {
-    apiCalls apiCalls;
+    ApiCalls apiCalls;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,11 +37,11 @@ public class CreateOrderFragment extends Fragment {
         Intent intent = new Intent(view.getContext(), CustomerDashboard.class);
         super.onViewCreated(view, savedInstanceState);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(getString(R.string.backend_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        apiCalls = retrofit.create(apiCalls.class);
+        apiCalls = retrofit.create(ApiCalls.class);
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -50,19 +49,19 @@ public class CreateOrderFragment extends Fragment {
 
                 final JsonObject paramObject = createOrderForm();
 
-                Call<createOrderStatus> call = apiCalls.createOrderPost(paramObject);
+                Call<CreateOrderStatus> call = apiCalls.createOrderPost(paramObject);
 
 
-                call.enqueue(new Callback<createOrderStatus>() {
+                call.enqueue(new Callback<CreateOrderStatus>() {
                     @Override
-                    public void onResponse(Call<createOrderStatus> call, Response<createOrderStatus> response) {
+                    public void onResponse(Call<CreateOrderStatus> call, Response<CreateOrderStatus> response) {
                         System.out.println(response);
                         if (!response.isSuccessful()) {
 
                             return;
                         }
 
-                        createOrderStatus status = response.body();
+                        CreateOrderStatus status = response.body();
 
                         if (status.success) {
 
@@ -85,11 +84,11 @@ public class CreateOrderFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<createOrderStatus> call, Throwable t) {
+                    public void onFailure(Call<CreateOrderStatus> call, Throwable t) {
 
                     }
 
-                });;
+                });
             }
         });
 

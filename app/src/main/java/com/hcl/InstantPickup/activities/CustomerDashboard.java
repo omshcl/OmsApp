@@ -13,11 +13,10 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,11 +27,7 @@ import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.GetOrders;
-import com.hcl.InstantPickup.models.Username;
-import com.hcl.InstantPickup.models.login.loginPost;
-import com.hcl.InstantPickup.models.login.loginStatus;
-import com.hcl.InstantPickup.services.apiCalls;
+import com.hcl.InstantPickup.services.ApiCalls;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,8 +38,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +47,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback,FragmentAcitivityConstants{
 
-    private com.hcl.InstantPickup.services.apiCalls apiCalls;
+    private ApiCalls apiCalls;
     private GoogleMap mMap;
     private int currentFragment;
 
@@ -81,10 +74,10 @@ public class CustomerDashboard extends AppCompatActivity
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(" http://6a9021c1.ngrok.io/")
+                .baseUrl(getString(R.string.backend_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        apiCalls = retrofit.create(apiCalls.class);
+        apiCalls = retrofit.create(ApiCalls.class);
 
 //        getOrders();
     }
@@ -93,7 +86,7 @@ public class CustomerDashboard extends AppCompatActivity
 
         JsonObject username = new JsonObject();
         username.addProperty("username", "pat_abh");
-        // Make POST request to /Login
+
         Call<JsonArray> call = apiCalls.getOrders(username);
 
         // Async callback and waits for response

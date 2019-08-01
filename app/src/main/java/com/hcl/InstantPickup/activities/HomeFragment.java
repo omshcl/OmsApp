@@ -1,16 +1,13 @@
 package com.hcl.InstantPickup.activities;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.models.GetOrders;
-import com.hcl.InstantPickup.models.Username;
-import com.hcl.InstantPickup.services.apiCalls;
+import com.hcl.InstantPickup.services.ApiCalls;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
 
-    private com.hcl.InstantPickup.services.apiCalls apiCalls;
+    private ApiCalls apiCalls;
     TableLayout tl;
 
     @Nullable
@@ -58,10 +53,10 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(" http://6a9021c1.ngrok.io/")
+                            .baseUrl(getString(R.string.backend_url))
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
-                    apiCalls = retrofit.create(com.hcl.InstantPickup.services.apiCalls.class);
+                    apiCalls = retrofit.create(ApiCalls.class);
 
                     getOrders();
                 }

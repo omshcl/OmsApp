@@ -3,6 +3,7 @@ package com.hcl.InstantPickup.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.app.NotificationChannel;
@@ -25,7 +26,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
@@ -71,7 +76,8 @@ public class CustomerDashboard extends AppCompatActivity
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiCalls = retrofit.create(ApiCalls.class);
-        setVariables(username); //SingletonClass variables
+        setVariables(username); //set SingletonClass variables
+        updateFBApiKey(username); //update Firebase API Key with backend
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -278,4 +284,39 @@ public class CustomerDashboard extends AppCompatActivity
         });
     }
 
+    private void updateFBApiKey(String username) {
+        final String un = username;
+        final String[] apiKey = new String[1];
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        apiKey[0] = task.getResult().getToken();
+                        Log.e("API Key", apiKey[0]);
+                        JsonObject usernameObject = new JsonObject();
+                        usernameObject.addProperty("username", un);
+                        usernameObject.addProperty("fbapikey", apiKey[0]);
+                        //System.out.println(usernameObject.toString());
+                        Call<JsonObject> call = apiCalls.updateFBApiKey(usernameObject);
+                        call.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.e("CD:updateFBApiKey()","Response Code"+response.code());
+                                    return;
+                                }
+                                // Request is successful
+                                System.out.println(response.body().toString());
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                                System.out.println(t.getMessage());
+                            }
+                        });
+                    }
+                });
+
+    }
 }

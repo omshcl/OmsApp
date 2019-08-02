@@ -195,8 +195,6 @@ public class HomeFragment extends Fragment {
                     tl.addView(tr_head1[i], new TableLayout.LayoutParams(
                             TableLayout.LayoutParams.MATCH_PARENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
-
-
                 }
 
             }

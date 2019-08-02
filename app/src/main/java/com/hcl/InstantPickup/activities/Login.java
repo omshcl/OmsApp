@@ -27,6 +27,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Login extends AppCompatActivity {
+
     private ApiCalls apiCalls;
 
     @Override
@@ -49,8 +50,8 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(View view) {
-        EditText username = (EditText) findViewById(R.id.username);
-        EditText password = (EditText) findViewById(R.id.password);
+        EditText username = findViewById(R.id.username);
+        EditText password = findViewById(R.id.password);
         String user = username.getText().toString();
         String pass = password.getText().toString();
         loginPost(user, pass);
@@ -81,7 +82,7 @@ public class Login extends AppCompatActivity {
 
                 // Go to createOrder page if valid
                 if (status.isValid) {
-                    EditText username = (EditText) findViewById(R.id.username);
+                    EditText username = findViewById(R.id.username);
                     System.out.println(username.getText().toString());
                     Intent createOrderIntent = new Intent(getApplicationContext(), CustomerDashboard.class);
                     createOrderIntent.putExtra("Username", username.getText().toString());

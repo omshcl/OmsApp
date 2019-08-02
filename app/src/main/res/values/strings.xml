@@ -23,4 +23,5 @@
     <string name="backend_url">http://10.0.2.2:8080/</string>
     <string name="element_text">Element</string>
     <fraction name="store_lat">33.09948150944979</fraction>
+    <integer name="value">50</integer>
 </resources>

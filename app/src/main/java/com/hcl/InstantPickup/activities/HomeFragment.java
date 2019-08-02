@@ -48,24 +48,41 @@ public class HomeFragment extends Fragment {
         TextView textView=(TextView)view.findViewById(R.id.textHomeWelcome);
 
         textView.setText("Welcome"+" "+username);
-        view.setVisibility(View.GONE);
+
         final Bundle bundle=this.getArguments();
+        if(bundle==null) {
+
+
+
+            view.findViewById(R.id.button2).setVisibility(View.GONE);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(getString(R.string.backend_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            apiCalls = retrofit.create(ApiCalls.class);
+
+            getOrders(username);
+        }
+
         if(bundle!=null) {
             view.setVisibility(View.VISIBLE);
 
 
             view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(getString(R.string.backend_url))
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    apiCalls = retrofit.create(ApiCalls.class);
+                public void onClick(View view2) {
+                    view2.setVisibility(View.VISIBLE);
 
-                    getOrders(username);
                 }
             });
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(getString(R.string.backend_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            apiCalls = retrofit.create(ApiCalls.class);
+
+            getOrders(username);
         }
 
         //WRITE ACTIVITY CODE HERE

@@ -53,16 +53,22 @@ public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback, FragmentAcitivityConstants {
     private GoogleMap mMap;
     private int currentFragment;
+    private ApiCalls apiCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_customer_dashboard);
         Intent i = getIntent();
         String username = i.getStringExtra("Username");
         System.out.println(username);
         SingletonClass.getInstance().setName(username);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getString(R.string.backend_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiCalls = retrofit.create(ApiCalls.class);
+        setVariables(username); //SingletonClass variables
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -232,5 +238,39 @@ public class CustomerDashboard extends AppCompatActivity
 
     }
 
+    public void setVariables(String username) {
+        JsonObject usernameObject = new JsonObject();
+        usernameObject.addProperty("username", username);
+        Call<JsonObject> call = apiCalls.getCustomerInfo(usernameObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("CD:setVariables()","Response Code"+response.code());
+                    return;
+                }
+                // Request is successful
+                JsonObject userInfo = response.body();
+                String firstname = userInfo.get("firstname").getAsString();
+                SingletonClass.getInstance().setFirstName(firstname);
+                String lastname = userInfo.get("lastname").getAsString();
+                SingletonClass.getInstance().setLastName(lastname);
+                String address = userInfo.get("address").getAsString();
+                SingletonClass.getInstance().setAddress(address);
+                String city = userInfo.get("city").getAsString();
+                SingletonClass.getInstance().setCity(city);
+                String state = userInfo.get("state").getAsString();
+                SingletonClass.getInstance().setState(state);
+                String zip = userInfo.get("zip").getAsString();
+                SingletonClass.getInstance().setZip(zip);
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                System.out.println(t.getMessage());
+            }
+        });
+    }
 
 }

@@ -25,4 +25,7 @@ public interface ApiCalls {
 
     @GET("items/list")
     Call<JsonArray> getItems();
+
+    @POST("customer")
+    Call<JsonObject> getCustomerInfo(@Body JsonObject username);
 }

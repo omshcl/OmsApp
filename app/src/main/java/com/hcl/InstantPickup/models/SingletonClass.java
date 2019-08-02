@@ -23,9 +23,7 @@ public class SingletonClass extends Application {
     private String state;
     private String zip;
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
     public String getAddress() { return address; }
@@ -35,5 +33,29 @@ public class SingletonClass extends Application {
 
     public void setName(String value) {
         this.name = value;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
     }
 }

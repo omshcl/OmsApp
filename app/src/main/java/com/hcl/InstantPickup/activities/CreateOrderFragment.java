@@ -30,7 +30,9 @@ import com.hcl.InstantPickup.models.createOrder.Item;
 import com.hcl.InstantPickup.models.createOrder.ItemListAdapter;
 import com.hcl.InstantPickup.services.ApiCalls;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,45 +204,30 @@ public class CreateOrderFragment extends Fragment {
     }
 
     private JsonObject createOrderForm() {
-        String s= SingletonClass.getInstance().getName();
-        JsonObject paramObject = new JsonObject();
-        JsonObject items = new JsonObject();
-        JsonObject quantity = new JsonObject();
-        JsonObject price = new JsonObject();
-        JsonArray itemList = new JsonArray();
-        items.addProperty("itemid", 1);
-        items.addProperty("subtotal", 149);
-        itemList.add(items);
+        JsonObject orderFormObject = new JsonObject();
+        JsonArray quantityList = mAdapter.getQuantities();
+        JsonArray priceList = mAdapter.getPrices();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String curDate = simpleDateFormat.format(new Date());
 
-        JsonArray quantityList = new JsonArray();
-        quantity.addProperty("itemid", 1);
-        quantity.addProperty("quantity", 2);
-        quantityList.add(quantity);
-
-        JsonArray priceList = new JsonArray();
-        price.addProperty("itemid", 1);
-        price.addProperty("price", 2);
-        priceList.add(price);
-        paramObject.addProperty("address", "123 Main St");
-        paramObject.addProperty("channel", "asasas");
-        paramObject.addProperty("city", "Frisco");
-        paramObject.addProperty("username", s);
-        paramObject.addProperty("date", "2019-07-23T18:12:48.422Z");
-        paramObject.addProperty("firstname", "Abhi");
-        paramObject.add("items", itemList);
-        paramObject.addProperty("lastname", "Patil");
-        paramObject.addProperty("ordertype", "Austin");
-        paramObject.addProperty("payment", "Credit");
-        paramObject.add("quantity", quantityList);
-        paramObject.add("price", priceList);
-        paramObject.addProperty("shipnode", "Austin");
-        paramObject.addProperty("state", "Texas");
-        paramObject.addProperty("total", 200);
-        paramObject.addProperty("zip", "75080");
-
-        System.out.println(paramObject);
-
-        return paramObject;
+        orderFormObject.addProperty("username", SingletonClass.getInstance().getName());
+        orderFormObject.addProperty("firstname", SingletonClass.getInstance().getFirstName());
+        orderFormObject.addProperty("lastname",SingletonClass.getInstance().getLastName());
+        orderFormObject.addProperty("address", SingletonClass.getInstance().getAddress());
+        orderFormObject.addProperty("city", SingletonClass.getInstance().getCity());
+        orderFormObject.addProperty("state", SingletonClass.getInstance().getState());
+        orderFormObject.addProperty("zip", SingletonClass.getInstance().getZip());
+        orderFormObject.addProperty("date", curDate);
+        orderFormObject.addProperty("channel", "Online");
+        orderFormObject.addProperty("ordertype", "Pickup");
+        orderFormObject.addProperty("shipnode", "Frisco");
+        orderFormObject.addProperty("payment", "Credit");
+        orderFormObject.add("quantity", quantityList);
+        orderFormObject.add("price", priceList);
+        orderFormObject.addProperty("total", total);
+        System.out.println(orderFormObject);
+        return orderFormObject;
     }
 }
 

@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -16,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -23,6 +27,7 @@ import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.models.createOrder.Item;
+import com.hcl.InstantPickup.models.createOrder.ItemListAdapter;
 import com.hcl.InstantPickup.services.ApiCalls;
 
 import java.util.ArrayList;
@@ -36,10 +41,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CreateOrderFragment extends Fragment implements OnItemSelectedListener {
-    ApiCalls apiCalls;
-    Map<String, Item> itemMap;
-    Spinner spinner;
+public class CreateOrderFragment extends Fragment {
+    private ApiCalls apiCalls;
+    private Map<String, Item> itemMap;
+    private Spinner spinner;
+    private TextView qtyTextView;
+    private TextView totalTextView;
+    private int total;
+    private RecyclerView recyclerView;
+    private ItemListAdapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +69,28 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
 
         apiCalls = retrofit.create(ApiCalls.class);
         getItems(view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        //recyclerView.setHasFixedSize(true);
 
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(view.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new ItemListAdapter();
+        recyclerView.setAdapter(mAdapter);
+        qtyTextView = (TextView) view.findViewById(R.id.quantity);
+        totalTextView = (TextView) view.findViewById(R.id.total);
+        total = 0;
+        Button addItemButton = (Button) view.findViewById(R.id.addItemButton);
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItem(v);
+            }
+        });
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -146,7 +179,6 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
     private void createSpinner(View view) {
         spinner = (Spinner) view.findViewById(R.id.itemSpinner);
         // Spinner click listener
-        spinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> items = new ArrayList<>();
         for(String key : itemMap.keySet()) {
@@ -158,6 +190,15 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
+    }
+
+    public void addItem(View view) {
+        String itemName = spinner.getSelectedItem().toString();
+        Item baseItem = itemMap.get(itemName);
+        Item newItem = new Item(baseItem, Integer.valueOf(qtyTextView.getText().toString()));
+        total += newItem.getPrice() * newItem.getQuantity();
+        totalTextView.setText("Total: $"+total);
+        mAdapter.addItem(newItem);
     }
 
     private JsonObject createOrderForm() {
@@ -200,20 +241,6 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
         System.out.println(paramObject);
 
         return paramObject;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        // On selecting a spinner item
-        String item = adapterView.getItemAtPosition(i).toString();
-
-        // Showing selected spinner item
-        Toast.makeText(adapterView.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }
 

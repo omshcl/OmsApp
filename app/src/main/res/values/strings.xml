@@ -20,8 +20,11 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="title_activity_maps">Map</string>
-    <string name="backend_url">http://10.0.2.2:8080/</string>
-    <string name="element_text">Element</string>
-    <fraction name="store_lat">33.09948150944979</fraction>
-    <integer name="value">50</integer>
+    <string name="backend_url">http://1e096d1c.ngrok.io/</string>
+    <string name="demand_type">DEMAND TYPE</string>
+    <string name="order_id">ORDER ID</string>
+    <string name="total">TOTAL</string>
+    <string name="action">ACTION</string>
+    <string name="on_my_way">ON MY WAY</string>
+    <string name="ready_pickup">READY_PICKUP</string>
 </resources>

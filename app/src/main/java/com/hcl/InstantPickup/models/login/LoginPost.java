@@ -1,6 +1,6 @@
 package com.hcl.InstantPickup.models.login;
 
-public class loginPost {
+public class LoginPost {
 
     private String username;
 
@@ -14,7 +14,7 @@ public class loginPost {
         return password;
     }
 
-    public loginPost(String username, String password){
+    public LoginPost(String username, String password){
         this.username = username;
         this.password = password;
     }

@@ -14,19 +14,35 @@
         android:text="Welcome to"
         android:textSize="30sp" />
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <Button
+        android:id="@+id/button2"
         android:layout_width="match_parent"
-        android:layout_height="176dp"
-        app:srcCompat="@drawable/bbb_logo_black" />
-
-    <TextView
-        android:id="@+id/textHomeRecentOrders"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Recent Orders"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp" />
+        android:text="ON MY WAY" />
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TableLayout
+        android:id="@+id/table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+
+</ScrollView>
 </LinearLayout>

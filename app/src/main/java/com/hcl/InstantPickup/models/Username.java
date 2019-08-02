@@ -1,7 +1,7 @@
 package com.hcl.InstantPickup.models;
 
 public class Username {
-    private String username;
+    public String username;
 
     public String getUsername() {
         return username;

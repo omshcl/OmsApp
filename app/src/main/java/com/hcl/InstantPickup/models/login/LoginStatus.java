@@ -1,11 +1,11 @@
 package com.hcl.InstantPickup.models.login;
 
-public class loginStatus {
+public class LoginStatus {
     public boolean isValid;
 
     public boolean isAdmin;
 
-    public loginStatus(Boolean isValid, Boolean isAdmin){
+    public LoginStatus(Boolean isValid, Boolean isAdmin){
         this.isValid = isValid;
         this.isAdmin = isAdmin;
     }

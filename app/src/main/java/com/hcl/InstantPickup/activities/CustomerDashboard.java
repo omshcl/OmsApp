@@ -57,7 +57,6 @@ public class CustomerDashboard extends AppCompatActivity
     private GoogleMap map;
     private ApiCalls apiCalls;
     private int currentFragment;
-    private ApiCalls apiCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

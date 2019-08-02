@@ -6,7 +6,9 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
-public class MyLocationListener implements LocationListener, LocationConstants {
+import static com.hcl.InstantPickup.location.LocationConstants.myShopLong;
+
+public class MyLocationListener implements LocationListener {
 
     private Context mContext;
     private static final double R = 6372.8; // In kilometers
@@ -21,8 +23,8 @@ public class MyLocationListener implements LocationListener, LocationConstants {
     public void onLocationChanged(Location location) {
         double latitude= location.getLatitude();
         double longitude = location.getLatitude();
-        double distance = haversine(myShopLat, myShopLong, latitude, longitude);
-        if(distance < geoFenceRange) {
+        double distance = haversine(LocationConstants.myShopLat, LocationConstants.myShopLong, latitude, longitude);
+        if(distance < LocationConstants.geoFenceRange) {
             ((LocationService)mContext).enteredShop();
         } else {
             ((LocationService)mContext).exitShop();

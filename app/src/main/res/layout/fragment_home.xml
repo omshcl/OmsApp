@@ -18,7 +18,7 @@
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ORDER DETAILS" />
+        android:text="ON MY WAY" />
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

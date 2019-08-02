@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.services.apiCalls;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.models.createOrder.Item;
@@ -37,9 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -142,8 +141,6 @@ public class CreateOrderFragment extends Fragment {
                 });
             }
         });
-
-
     }
 
     private void getItems(final View view) {

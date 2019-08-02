@@ -49,9 +49,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class CustomerDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback, FragmentAcitivityConstants {
-    private GoogleMap mMap;
+        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback{
+
+
+    private GoogleMap map;
+    private ApiCalls apiCalls;
     private int currentFragment;
     private ApiCalls apiCalls;
 
@@ -79,8 +83,8 @@ public class CustomerDashboard extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        if (savedInstanceState != null) {
-            currentFragment = savedInstanceState.getInt("activeFragment", HomeFragmentId);
+        if(savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt("activeFragment", FragmentAcitivityConstants.HomeFragmentId);
             switchFragment(currentFragment);
         }
         navigationView.setNavigationItemSelectedListener(this);
@@ -124,11 +128,12 @@ public class CustomerDashboard extends AppCompatActivity
     private void switchFragment(int fragmentID) {
         Fragment fragment = null;
         currentFragment = fragmentID;
-        if (fragmentID == HomeFragmentId) {
+        if (fragmentID == FragmentAcitivityConstants.HomeFragmentId) {
             fragment = new HomeFragment();
-        } else if (fragmentID == CreateOrderFragmentId) {
+        } else if (fragmentID == FragmentAcitivityConstants.CreateOrderFragmentId) {
             fragment = new CreateOrderFragment();
-        } else if (fragmentID == YourShopFragmentId) {
+        }
+        else if (fragmentID == FragmentAcitivityConstants.YourShopFragmentId){
             fragment = new YourStoreFragment();
         }
 
@@ -146,13 +151,14 @@ public class CustomerDashboard extends AppCompatActivity
         // Handle navigation view item clicks here.
         Fragment fragment = null;
         int id = item.getItemId();
-        int fragmentId = HomeFragmentId;
+        int fragmentId = FragmentAcitivityConstants.HomeFragmentId;
         if (id == R.id.nav_home) {
-            fragmentId = HomeFragmentId;
+            fragmentId = FragmentAcitivityConstants.HomeFragmentId;
         } else if (id == R.id.nav_createorder) {
-            fragmentId = CreateOrderFragmentId;
-        } else if (id == R.id.nav_yourstore) {
-            fragmentId = YourShopFragmentId;
+            fragmentId = FragmentAcitivityConstants.CreateOrderFragmentId;
+        }
+        else if (id == R.id.nav_yourstore) {
+            fragmentId = FragmentAcitivityConstants.YourShopFragmentId;
         }
         switchFragment(fragmentId);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

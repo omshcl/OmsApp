@@ -21,9 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreateOrderActivity extends AppCompatActivity {
 
-
-
-
     private apiCalls apiCalls;
 
     @Override

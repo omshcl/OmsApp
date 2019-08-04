@@ -56,12 +56,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class CustomerDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
 
     private GoogleMap map;
     private ApiCalls apiCalls;
     private int currentFragment;
+    public static CustomerDashboard instance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +96,7 @@ public class CustomerDashboard extends AppCompatActivity
         }
         navigationView.setNavigationItemSelectedListener(this);
         createNotificationChannel();
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
+        instance = this;
     }
 
     @Override
@@ -171,10 +172,6 @@ public class CustomerDashboard extends AppCompatActivity
         return true;
     }
 
-    private LocationService locationService;
-    private boolean bound = false;
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -185,43 +182,6 @@ public class CustomerDashboard extends AppCompatActivity
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("activeFragment", currentFragment);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (bound) {
-            locationService.setCallbacks(null);
-            unbindService(locationServiceConnection);
-            bound = false;
-        }
-    }
-
-    private ServiceConnection locationServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
-            locationService = binder.getService();
-            bound = true;
-            locationService.setCallbacks(CustomerDashboard.this);
-            Log.e("location", "callbacks set");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            bound = false;
-        }
-    };
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Intent newIntent = new Intent(this, LocationService.class);
-        startService(newIntent);
-        Intent intent = new Intent(this, LocationService.class);
-        bindService(intent, locationServiceConnection, Context.BIND_AUTO_CREATE);
-        Log.i("location", "bound location services");
-    }
-
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -239,15 +199,7 @@ public class CustomerDashboard extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onEntersShop() {
-        Toast.makeText(this, "Entered into location", Toast.LENGTH_LONG).show();
-    }
 
-    @Override
-    public void onExitShop() {
-
-    }
 
     public void setVariables(String username) {
         JsonObject usernameObject = new JsonObject();
@@ -318,5 +270,21 @@ public class CustomerDashboard extends AppCompatActivity
                     }
                 });
 
+    }
+
+    public void onPickedup() {
+
+    }
+
+
+    public void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Intent newIntent = new Intent(this, LocationService.class);
+        startService(newIntent);
     }
 }

@@ -191,6 +191,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         YourStoreFragment yourStoreFragment = new YourStoreFragment();
+                        startLocationService();
                         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), yourStoreFragment);
                         fragmentTransaction.addToBackStack(null);
@@ -206,5 +207,11 @@ public class HomeFragment extends Fragment {
                     TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT));
         }
+
+
+    }
+
+    public void startLocationService() {
+        ((CustomerDashboard)getActivity()).requestPermissions();
     }
 }

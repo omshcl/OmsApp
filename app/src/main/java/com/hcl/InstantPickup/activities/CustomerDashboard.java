@@ -284,8 +284,7 @@ public class CustomerDashboard extends AppCompatActivity
 
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
-//                textViewResult.setText(t.getMessage());
-                                System.out.println(t.getMessage());
+                                Log.e("FBApiKey Failure",t.getMessage());
                             }
                         });
                     }

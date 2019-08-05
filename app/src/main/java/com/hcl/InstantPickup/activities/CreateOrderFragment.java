@@ -3,6 +3,7 @@ package com.hcl.InstantPickup.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,6 @@ public class CreateOrderFragment extends Fragment {
     private Spinner spinner;
     private TextView qtyTextView;
     private TextView totalTextView;
-    private int total;
     private RecyclerView recyclerView;
     private ItemListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -83,11 +83,10 @@ public class CreateOrderFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new ItemListAdapter();
-        recyclerView.setAdapter(mAdapter);
         qtyTextView = (TextView) view.findViewById(R.id.quantity);
         totalTextView = (TextView) view.findViewById(R.id.total);
-        total = 0;
+        mAdapter = new ItemListAdapter(totalTextView);
+        recyclerView.setAdapter(mAdapter);
         Button addItemButton = (Button) view.findViewById(R.id.addItemButton);
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,27 +97,26 @@ public class CreateOrderFragment extends Fragment {
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-
-
+                if(mAdapter.getItemCount() == 0) {
+                    Toast toast = Toast.makeText(getActivity(),"Please add items to your cart",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
+                    return;
+                }
                 final JsonObject paramObject = createOrderForm();
-
                 Call<CreateOrderStatus> call = apiCalls.createOrderPost(paramObject);
-
-
                 call.enqueue(new Callback<CreateOrderStatus>() {
                     @Override
                     public void onResponse(Call<CreateOrderStatus> call, Response<CreateOrderStatus> response) {
                         System.out.println(response);
                         if (!response.isSuccessful()) {
-
                             return;
                         }
-
                         CreateOrderStatus status = response.body();
-
                         if (status.success) {
-
-                            Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_LONG).show();
+                            Toast toast = Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                            toast.show();
                             Bundle b = new Bundle();
                             b.putString("address", paramObject.get("address").getAsString());
                             b.putString("shipnode",paramObject.get("shipnode").getAsString());
@@ -190,12 +188,16 @@ public class CreateOrderFragment extends Fragment {
     }
 
     public void addItem(View view) {
-        String itemName = spinner.getSelectedItem().toString();
-        Item baseItem = itemMap.get(itemName);
-        Item newItem = new Item(baseItem, Integer.valueOf(qtyTextView.getText().toString()));
-        total += newItem.getPrice() * newItem.getQuantity();
-        totalTextView.setText("Total: $"+total);
-        mAdapter.addItem(newItem);
+        if(!qtyTextView.getText().toString().isEmpty()) {
+            int quantity = Integer.valueOf(qtyTextView.getText().toString());
+            String itemName = spinner.getSelectedItem().toString();
+            Item baseItem = itemMap.get(itemName);
+            Item newItem = new Item(baseItem, quantity);
+            int total = Integer.valueOf(totalTextView.getText().toString().replace("Total: $", ""));
+            total += newItem.getPrice() * newItem.getQuantity();
+            totalTextView.setText("Total: $" + total);
+            mAdapter.addItem(newItem);
+        }
     }
 
     private JsonObject createOrderForm() {
@@ -205,6 +207,7 @@ public class CreateOrderFragment extends Fragment {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String curDate = simpleDateFormat.format(new Date());
+        int total = Integer.valueOf(totalTextView.getText().toString().replace("Total: $",""));
 
         orderFormObject.addProperty("username", SingletonClass.getInstance().getName());
         orderFormObject.addProperty("firstname", SingletonClass.getInstance().getFirstName());

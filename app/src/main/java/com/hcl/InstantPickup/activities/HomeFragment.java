@@ -1,7 +1,9 @@
 package com.hcl.InstantPickup.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -191,10 +193,12 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         startLocationService();
-                        CustomerDashboard dashboard = CustomerDashboard.instance;
-                        if(dashboard != null) {
-                            dashboard.switchFragment(FragmentAcitivityConstants.YourShopFragmentId);
-                        }
+                        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
+                        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+
 
                     }
                 });

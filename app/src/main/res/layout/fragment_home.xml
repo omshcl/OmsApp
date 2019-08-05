@@ -10,26 +10,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAlignment="center"
         android:text="Welcome to"
+        android:textAlignment="center"
         android:textSize="30sp" />
 
     <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TableLayout
-        android:id="@+id/table_layout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content">
 
-        <TableRow
+        <TableLayout
+            android:id="@+id/table_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"/>
+            android:layout_height="400dp"
+            android:layout_gravity="center">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal" />
 
 
-    </TableLayout>
+        </TableLayout>
 
-</ScrollView>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/expand"
+        android:layout_width="138dp"
+        android:layout_height="wrap_content"
+        android:text="EXPAND" />
 </LinearLayout>

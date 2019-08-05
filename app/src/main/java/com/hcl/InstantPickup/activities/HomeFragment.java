@@ -23,6 +23,14 @@ import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.services.ApiCalls;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,7 +102,38 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void generateOrderTable(JsonArray orders){
+    private JsonArray sortJsonArray(JsonArray orders){
+        JsonArray sortedJsonArray = new JsonArray();
+        List<JsonObject> jsonList = new ArrayList<>();
+        for (int i = 0; i < orders.size(); i++) {
+            jsonList.add(orders.get(i).getAsJsonObject());
+        }
+
+        Collections.sort( jsonList, new Comparator<JsonObject>() {
+
+            public int compare(JsonObject a, JsonObject b) {
+                String valA = new String();
+                String valB = new String();
+
+                valA =  a.get("date").getAsString();
+                valB =  b.get("date").getAsString();
+
+                return valA.compareTo(valB);
+            }
+        });
+
+        for (int i = orders.size() -1; i >= 0; i--) {
+            sortedJsonArray.add(jsonList.get(i));
+            System.out.println(jsonList.get(i));
+        }
+
+        return sortedJsonArray;
+    }
+
+    private void generateOrderTable(JsonArray orders1){
+
+        // Sort JsonArray by date of orders
+        JsonArray orders = sortJsonArray(orders1);
 
         // Request is successful
         int padding = 20;

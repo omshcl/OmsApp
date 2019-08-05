@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -16,30 +18,44 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.services.ApiCalls;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.models.createOrder.Item;
+import com.hcl.InstantPickup.models.createOrder.ItemListAdapter;
 import com.hcl.InstantPickup.services.ApiCalls;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CreateOrderFragment extends Fragment implements OnItemSelectedListener {
-    ApiCalls apiCalls;
-    Map<String, Item> itemMap;
-    Spinner spinner;
+public class CreateOrderFragment extends Fragment {
+    private ApiCalls apiCalls;
+    private Map<String, Item> itemMap;
+    private Spinner spinner;
+    private TextView qtyTextView;
+    private TextView totalTextView;
+    private int total;
+    private RecyclerView recyclerView;
+    private ItemListAdapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +73,28 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
 
         apiCalls = retrofit.create(ApiCalls.class);
         getItems(view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        //recyclerView.setHasFixedSize(true);
 
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(view.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new ItemListAdapter();
+        recyclerView.setAdapter(mAdapter);
+        qtyTextView = (TextView) view.findViewById(R.id.quantity);
+        totalTextView = (TextView) view.findViewById(R.id.total);
+        total = 0;
+        Button addItemButton = (Button) view.findViewById(R.id.addItemButton);
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItem(v);
+            }
+        });
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -82,19 +119,14 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
                         if (status.success) {
 
                             Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_LONG).show();
-                            HomeFragment homefragment = new HomeFragment();
                             Bundle b = new Bundle();
                             b.putString("address", paramObject.get("address").getAsString());
                             b.putString("shipnode",paramObject.get("shipnode").getAsString());
                             b.putString("total",paramObject.get("total").getAsString());
-                            homefragment.setArguments(b);
-
-                            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), homefragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-
-
+                            CustomerDashboard dashboard = CustomerDashboard.instance;
+                            if(dashboard != null) {
+                                dashboard.switchFragment(FragmentAcitivityConstants.HomeFragmentId);
+                            }
                         } else
                             Toast.makeText(getActivity(),"Failed to place order",Toast.LENGTH_LONG).show();
                     }
@@ -107,8 +139,6 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
                 });
             }
         });
-
-
     }
 
     private void getItems(final View view) {
@@ -146,7 +176,6 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
     private void createSpinner(View view) {
         spinner = (Spinner) view.findViewById(R.id.itemSpinner);
         // Spinner click listener
-        spinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> items = new ArrayList<>();
         for(String key : itemMap.keySet()) {
@@ -160,60 +189,40 @@ public class CreateOrderFragment extends Fragment implements OnItemSelectedListe
         spinner.setAdapter(dataAdapter);
     }
 
+    public void addItem(View view) {
+        String itemName = spinner.getSelectedItem().toString();
+        Item baseItem = itemMap.get(itemName);
+        Item newItem = new Item(baseItem, Integer.valueOf(qtyTextView.getText().toString()));
+        total += newItem.getPrice() * newItem.getQuantity();
+        totalTextView.setText("Total: $"+total);
+        mAdapter.addItem(newItem);
+    }
+
     private JsonObject createOrderForm() {
-        String s= SingletonClass.getInstance().getName();
-        JsonObject paramObject = new JsonObject();
-        JsonObject items = new JsonObject();
-        JsonObject quantity = new JsonObject();
-        JsonObject price = new JsonObject();
-        JsonArray itemList = new JsonArray();
-        items.addProperty("itemid", 1);
-        items.addProperty("subtotal", 149);
-        itemList.add(items);
+        JsonObject orderFormObject = new JsonObject();
+        JsonArray quantityList = mAdapter.getQuantities();
+        JsonArray priceList = mAdapter.getPrices();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String curDate = simpleDateFormat.format(new Date());
 
-        JsonArray quantityList = new JsonArray();
-        quantity.addProperty("itemid", 1);
-        quantity.addProperty("quantity", 2);
-        quantityList.add(quantity);
-
-        JsonArray priceList = new JsonArray();
-        price.addProperty("itemid", 1);
-        price.addProperty("price", 2);
-        priceList.add(price);
-        paramObject.addProperty("address", "123 Main St");
-        paramObject.addProperty("channel", "asasas");
-        paramObject.addProperty("city", "Frisco");
-        paramObject.addProperty("username", s);
-        paramObject.addProperty("date", "2019-07-23T18:12:48.422Z");
-        paramObject.addProperty("firstname", "Abhi");
-        paramObject.add("items", itemList);
-        paramObject.addProperty("lastname", "Patil");
-        paramObject.addProperty("ordertype", "Austin");
-        paramObject.addProperty("payment", "Credit");
-        paramObject.add("quantity", quantityList);
-        paramObject.add("price", priceList);
-        paramObject.addProperty("shipnode", "Austin");
-        paramObject.addProperty("state", "Texas");
-        paramObject.addProperty("total", 200);
-        paramObject.addProperty("zip", "75080");
-
-        System.out.println(paramObject);
-
-        return paramObject;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        // On selecting a spinner item
-        String item = adapterView.getItemAtPosition(i).toString();
-
-        // Showing selected spinner item
-        Toast.makeText(adapterView.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
+        orderFormObject.addProperty("username", SingletonClass.getInstance().getName());
+        orderFormObject.addProperty("firstname", SingletonClass.getInstance().getFirstName());
+        orderFormObject.addProperty("lastname",SingletonClass.getInstance().getLastName());
+        orderFormObject.addProperty("address", SingletonClass.getInstance().getAddress());
+        orderFormObject.addProperty("city", SingletonClass.getInstance().getCity());
+        orderFormObject.addProperty("state", SingletonClass.getInstance().getState());
+        orderFormObject.addProperty("zip", SingletonClass.getInstance().getZip());
+        orderFormObject.addProperty("date", curDate);
+        orderFormObject.addProperty("channel", "Online");
+        orderFormObject.addProperty("ordertype", "Pickup");
+        orderFormObject.addProperty("shipnode", "Frisco");
+        orderFormObject.addProperty("payment", "Credit");
+        orderFormObject.add("quantity", quantityList);
+        orderFormObject.add("price", priceList);
+        orderFormObject.addProperty("total", total);
+        System.out.println(orderFormObject);
+        return orderFormObject;
     }
 }
 

@@ -3,6 +3,7 @@ package com.hcl.InstantPickup.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.app.NotificationChannel;
@@ -25,7 +26,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
@@ -49,20 +54,32 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class CustomerDashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationTrackingCallback, FragmentAcitivityConstants {
-    private GoogleMap mMap;
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private GoogleMap map;
+    private ApiCalls apiCalls;
     private int currentFragment;
+    public static CustomerDashboard instance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_customer_dashboard);
         Intent i = getIntent();
         String username = i.getStringExtra("Username");
         System.out.println(username);
         SingletonClass.getInstance().setName(username);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getString(R.string.backend_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiCalls = retrofit.create(ApiCalls.class);
+        setVariables(username); //set SingletonClass variables
+        updateFBApiKey(username); //update Firebase API Key with backend
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,14 +90,13 @@ public class CustomerDashboard extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        if (savedInstanceState != null) {
-            currentFragment = savedInstanceState.getInt("activeFragment", HomeFragmentId);
+        if(savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt("activeFragment", FragmentAcitivityConstants.HomeFragmentId);
             switchFragment(currentFragment);
         }
         navigationView.setNavigationItemSelectedListener(this);
         createNotificationChannel();
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
+        instance = this;
     }
 
     @Override
@@ -115,15 +131,17 @@ public class CustomerDashboard extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void switchFragment(int fragmentID) {
+    public void switchFragment(int fragmentID) {
         Fragment fragment = null;
         currentFragment = fragmentID;
-        if (fragmentID == HomeFragmentId) {
+        if (fragmentID == FragmentAcitivityConstants.HomeFragmentId) {
             fragment = new HomeFragment();
-        } else if (fragmentID == CreateOrderFragmentId) {
+        } else if (fragmentID == FragmentAcitivityConstants.CreateOrderFragmentId) {
             fragment = new CreateOrderFragment();
-        } else if (fragmentID == YourShopFragmentId) {
+        } else if (fragmentID == FragmentAcitivityConstants.YourShopFragmentId){
             fragment = new YourStoreFragment();
+        } else if (fragmentID == FragmentAcitivityConstants.ReadyForPickupFragment) {
+            fragment  = new ReadyForPickupFragment();
         }
 
         if (fragment != null) {
@@ -140,23 +158,20 @@ public class CustomerDashboard extends AppCompatActivity
         // Handle navigation view item clicks here.
         Fragment fragment = null;
         int id = item.getItemId();
-        int fragmentId = HomeFragmentId;
+        int fragmentId = FragmentAcitivityConstants.HomeFragmentId;
         if (id == R.id.nav_home) {
-            fragmentId = HomeFragmentId;
+            fragmentId = FragmentAcitivityConstants.HomeFragmentId;
         } else if (id == R.id.nav_createorder) {
-            fragmentId = CreateOrderFragmentId;
-        } else if (id == R.id.nav_yourstore) {
-            fragmentId = YourShopFragmentId;
+            fragmentId = FragmentAcitivityConstants.CreateOrderFragmentId;
+        }
+        else if (id == R.id.nav_yourstore) {
+            fragmentId = FragmentAcitivityConstants.YourShopFragmentId;
         }
         switchFragment(fragmentId);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private LocationService locationService;
-    private boolean bound = false;
-
 
     @Override
     protected void onStart() {
@@ -168,43 +183,6 @@ public class CustomerDashboard extends AppCompatActivity
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("activeFragment", currentFragment);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (bound) {
-            locationService.setCallbacks(null);
-            unbindService(locationServiceConnection);
-            bound = false;
-        }
-    }
-
-    private ServiceConnection locationServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
-            locationService = binder.getService();
-            bound = true;
-            locationService.setCallbacks(CustomerDashboard.this);
-            Log.e("location", "callbacks set");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            bound = false;
-        }
-    };
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Intent newIntent = new Intent(this, LocationService.class);
-        startService(newIntent);
-        Intent intent = new Intent(this, LocationService.class);
-        bindService(intent, locationServiceConnection, Context.BIND_AUTO_CREATE);
-        Log.i("location", "bound location services");
-    }
-
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -222,15 +200,92 @@ public class CustomerDashboard extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onEntersShop() {
-        Toast.makeText(this, "Entered into location", Toast.LENGTH_LONG).show();
+
+
+    public void setVariables(String username) {
+        JsonObject usernameObject = new JsonObject();
+        usernameObject.addProperty("username", username);
+        Call<JsonObject> call = apiCalls.getCustomerInfo(usernameObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("CD:setVariables()","Response Code"+response.code());
+                    return;
+                }
+                // Request is successful
+                JsonObject userInfo = response.body();
+                String firstname = userInfo.get("firstname").getAsString();
+                SingletonClass.getInstance().setFirstName(firstname);
+                String lastname = userInfo.get("lastname").getAsString();
+                SingletonClass.getInstance().setLastName(lastname);
+                String address = userInfo.get("address").getAsString();
+                SingletonClass.getInstance().setAddress(address);
+                String city = userInfo.get("city").getAsString();
+                SingletonClass.getInstance().setCity(city);
+                String state = userInfo.get("state").getAsString();
+                SingletonClass.getInstance().setState(state);
+                String zip = userInfo.get("zip").getAsString();
+                SingletonClass.getInstance().setZip(zip);
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                System.out.println(t.getMessage());
+            }
+        });
     }
 
-    @Override
-    public void onExitShop() {
+    private void updateFBApiKey(String username) {
+        final String un = username;
+        final String[] apiKey = new String[1];
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        apiKey[0] = task.getResult().getToken();
+                        Log.e("API Key", apiKey[0]);
+                        JsonObject usernameObject = new JsonObject();
+                        usernameObject.addProperty("username", un);
+                        usernameObject.addProperty("fbapikey", apiKey[0]);
+                        //System.out.println(usernameObject.toString());
+                        Call<JsonObject> call = apiCalls.updateFBApiKey(usernameObject);
+                        call.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.e("CD:updateFBApiKey()","Response Code"+response.code());
+                                    return;
+                                }
+                                // Request is successful
+                                System.out.println(response.body().toString());
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                textViewResult.setText(t.getMessage());
+                                System.out.println(t.getMessage());
+                            }
+                        });
+                    }
+                });
 
     }
 
+    public void onPickedup() {
+        switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
+    }
 
+
+    public void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Intent newIntent = new Intent(this, LocationService.class);
+        startService(newIntent);
+    }
 }

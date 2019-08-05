@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.login.LoginPost;
 import com.hcl.InstantPickup.models.login.LoginStatus;
@@ -34,14 +32,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        String token = task.getResult().getToken();
-                        Log.e("API Key", token);
-                    }
-                });
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(getString(R.string.backend_url))
                 .addConverterFactory(GsonConverterFactory.create())

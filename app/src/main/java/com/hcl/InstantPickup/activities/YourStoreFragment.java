@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.location.LocationConstants;
 
-public class YourStoreFragment extends Fragment implements LocationConstants {
+public class YourStoreFragment extends Fragment  {
   
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,17 +37,17 @@ public class YourStoreFragment extends Fragment implements LocationConstants {
 
                 mMap.clear(); //clear old markers
                 CameraPosition googlePlex = CameraPosition.builder()
-                        .target(shopLatLng)
-                        .zoom(shopZoomLevel)
-                        .bearing(shopBearing)
-                        .tilt(shopTilt)
+                        .target(LocationConstants.shopLatLng)
+                        .zoom(LocationConstants.shopZoomLevel)
+                        .bearing(LocationConstants.shopBearing)
+                        .tilt(LocationConstants.shopTilt)
                         .build();
 
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), shopAnimationTime, null);
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), LocationConstants.shopAnimationTime, null);
 
                 mMap.addMarker(new MarkerOptions()
-                        .position(shopLatLng)
-                        .title(shopIconTitle)
+                        .position(LocationConstants.shopLatLng)
+                        .title(LocationConstants.shopIconTitle)
                         .snippet(getString(R.string.store_name)+": Frisco location "));
             }
         });

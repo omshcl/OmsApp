@@ -22,27 +22,19 @@ import com.hcl.InstantPickup.activities.CustomerDashboard;
 public class LocationService extends Service {
 
 
-    private final IBinder binder = new LocalBinder();
     private LocationTrackingCallback serviceCallbacks;
 
-    public class LocalBinder extends Binder {
-        public LocationService getService() {
-            return LocationService.this;
-        }
 
-    }
-
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground();
         return super.onStartCommand(intent,flags,startId);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public void setCallbacks(LocationTrackingCallback callbacks) {
@@ -69,12 +61,13 @@ public class LocationService extends Service {
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new MyLocationListener(this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 10, locationListener);
     }
 
     public void enteredShop() {
-        if(serviceCallbacks != null) {
-            serviceCallbacks.onEntersShop();
+        CustomerDashboard dashboard = CustomerDashboard.instance;
+        if(dashboard != null) {
+            dashboard.onPickedup();
         }
     }
 

@@ -31,4 +31,7 @@ public interface ApiCalls {
 
     @POST("/customer/fbapikey")
     Call<JsonObject> updateFBApiKey(@Body JsonObject username);
+
+    @POST("/orders/customer_coming")
+    Call<String> customercoming(@Body JsonObject id);
 }

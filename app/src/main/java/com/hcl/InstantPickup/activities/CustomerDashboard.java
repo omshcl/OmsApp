@@ -4,10 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -53,6 +55,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Binder;
+import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
+import com.hcl.InstantPickup.R;
+import com.hcl.InstantPickup.activities.CustomerDashboard;
 
 
 public class CustomerDashboard extends AppCompatActivity
@@ -273,6 +293,19 @@ public class CustomerDashboard extends AppCompatActivity
     }
 
     public void onPickedup() {
+        Log.i("customer","onpicked up called");
+        Intent notificationIntent = new Intent(this, CustomerDashboard.class);
+        notificationIntent.setAction("action");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+        NotificationCompat.Builder builder =new NotificationCompat.Builder(this,getString(R.string.channel_id))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("Welcome to " + getString(R.string.store_name)+ "  an attendant will be with you shortly")
+                .setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(R.string.channel_id,builder.build());
+        Intent stopServiceIntent = new Intent(this, LocationService.class);
+        stopService(stopServiceIntent);
         switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
     }
 

@@ -22,8 +22,11 @@ public class MyLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         double latitude= location.getLatitude();
-        double longitude = location.getLatitude();
+        double longitude = location.getLongitude();
         double distance = haversine(LocationConstants.myShopLat, LocationConstants.myShopLong, latitude, longitude);
+        Log.i("location"," " + distance);
+        Log.i("location","constants " + LocationConstants.myShopLat + " " + myShopLong);
+        Log.i("location","chaning" + latitude+ " " + longitude);
         if(distance < LocationConstants.geoFenceRange) {
             ((LocationService)mContext).enteredShop();
         } else {

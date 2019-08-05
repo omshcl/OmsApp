@@ -131,16 +131,17 @@ public class CustomerDashboard extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void switchFragment(int fragmentID) {
+    public void switchFragment(int fragmentID) {
         Fragment fragment = null;
         currentFragment = fragmentID;
         if (fragmentID == FragmentAcitivityConstants.HomeFragmentId) {
             fragment = new HomeFragment();
         } else if (fragmentID == FragmentAcitivityConstants.CreateOrderFragmentId) {
             fragment = new CreateOrderFragment();
-        }
-        else if (fragmentID == FragmentAcitivityConstants.YourShopFragmentId){
+        } else if (fragmentID == FragmentAcitivityConstants.YourShopFragmentId){
             fragment = new YourStoreFragment();
+        } else if (fragmentID == FragmentAcitivityConstants.ReadyForPickupFragment) {
+            fragment  = new ReadyForPickupFragment();
         }
 
         if (fragment != null) {
@@ -273,7 +274,7 @@ public class CustomerDashboard extends AppCompatActivity
     }
 
     public void onPickedup() {
-
+        switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
     }
 
 

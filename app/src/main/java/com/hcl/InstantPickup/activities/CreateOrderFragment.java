@@ -119,19 +119,14 @@ public class CreateOrderFragment extends Fragment {
                         if (status.success) {
 
                             Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_LONG).show();
-                            HomeFragment homefragment = new HomeFragment();
                             Bundle b = new Bundle();
                             b.putString("address", paramObject.get("address").getAsString());
                             b.putString("shipnode",paramObject.get("shipnode").getAsString());
                             b.putString("total",paramObject.get("total").getAsString());
-                            homefragment.setArguments(b);
-
-                            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), homefragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-
-
+                            CustomerDashboard dashboard = CustomerDashboard.instance;
+                            if(dashboard != null) {
+                                dashboard.switchFragment(FragmentAcitivityConstants.HomeFragmentId);
+                            }
                         } else
                             Toast.makeText(getActivity(),"Failed to place order",Toast.LENGTH_LONG).show();
                     }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,16 @@ public class ReadyForPickupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Intent intent = new Intent(view.getContext(), CustomerDashboard.class);
         super.onViewCreated(view, savedInstanceState);
+        Button button = (Button) getView().findViewById(R.id.complete);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                CustomerDashboard dashboard = CustomerDashboard.instance;
+                if(dashboard != null) {
+                    dashboard.switchFragment(FragmentAcitivityConstants.HomeFragmentId);
+                }
+            }
+        });
+
 
     }
 

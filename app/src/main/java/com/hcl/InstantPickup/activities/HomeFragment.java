@@ -190,12 +190,11 @@ public class HomeFragment extends Fragment {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        YourStoreFragment yourStoreFragment = new YourStoreFragment();
                         startLocationService();
-                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), yourStoreFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        CustomerDashboard dashboard = CustomerDashboard.instance;
+                        if(dashboard != null) {
+                            dashboard.switchFragment(FragmentAcitivityConstants.YourShopFragmentId);
+                        }
 
                     }
                 });

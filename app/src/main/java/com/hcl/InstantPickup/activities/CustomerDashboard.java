@@ -99,7 +99,7 @@ public class CustomerDashboard extends AppCompatActivity
                 .build();
         apiCalls = retrofit.create(ApiCalls.class);
         setVariables(username); //set SingletonClass variables
-        //updateFBApiKey(username); //update Firebase API Key with backend
+        updateFBApiKey(username); //update Firebase API Key with backend
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

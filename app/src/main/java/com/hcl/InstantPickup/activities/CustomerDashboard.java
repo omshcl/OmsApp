@@ -145,6 +145,8 @@ public class CustomerDashboard extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent loginIntent = new Intent(getApplicationContext(), Login.class);
+            startActivity(loginIntent);
             return true;
         }
 

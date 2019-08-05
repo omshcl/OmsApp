@@ -20,23 +20,15 @@
     <TableLayout
         android:id="@+id/table_layout"
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="400dp"
+        android:layout_gravity="center">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </TableLayout>
 
 </ScrollView>

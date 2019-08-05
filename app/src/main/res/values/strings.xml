@@ -20,7 +20,7 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="title_activity_maps">Map</string>
-    <string name="backend_url">http://3adf0eb8.ngrok.io/</string>
+    <string name="backend_url">http://10.0.2.2:8080/</string>
     <fraction name="store_lat">33.09948150944979</fraction>
     <integer name="value">50</integer>
 </resources>

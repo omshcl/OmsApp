@@ -16,7 +16,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="8dp"
-        android:text="An attendant will be with you shortly. Please tell the attendent your order code:"
+        android:text="An attendant will be with you shortly. Please tell the attendant your order code:"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

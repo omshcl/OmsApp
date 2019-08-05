@@ -99,7 +99,7 @@ public class CustomerDashboard extends AppCompatActivity
                 .build();
         apiCalls = retrofit.create(ApiCalls.class);
         setVariables(username); //set SingletonClass variables
-        updateFBApiKey(username); //update Firebase API Key with backend
+        //updateFBApiKey(username); //update Firebase API Key with backend
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -284,8 +284,7 @@ public class CustomerDashboard extends AppCompatActivity
 
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
-//                textViewResult.setText(t.getMessage());
-                                System.out.println(t.getMessage());
+                                Log.e("FBApiKey Failure",t.getMessage());
                             }
                         });
                     }

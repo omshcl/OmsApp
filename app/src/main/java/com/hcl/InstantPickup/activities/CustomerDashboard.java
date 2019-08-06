@@ -56,24 +56,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import android.annotation.SuppressLint;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Binder;
-import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-
-import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.activities.CustomerDashboard;
-
 
 public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,7 +81,7 @@ public class CustomerDashboard extends AppCompatActivity
                 .build();
         apiCalls = retrofit.create(ApiCalls.class);
         setVariables(username); //set SingletonClass variables
-        //updateFBApiKey(username); //update Firebase API Key with backend
+        updateFBApiKey(username); //update Firebase API Key with backend
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -145,6 +127,8 @@ public class CustomerDashboard extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent loginIntent = new Intent(getApplicationContext(), Login.class);
+            startActivity(loginIntent);
             return true;
         }
 

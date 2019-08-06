@@ -30,6 +30,7 @@
     <string name="ready_pickup">READY_PICKUP</string>
     <string name="date">DATE</string>
     <string name="element_text">Element</string>
+    <string name="pickup_welcome">An attendant will be with you shortly. Please tell the attendant your order code:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -322,7 +322,6 @@ public class CustomerDashboard extends AppCompatActivity
 
         JsonObject order_ready = SingletonClass.getInstance().getReadyOrder();
         change_demand_type_customer_ready(order_ready);
-
         switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
         Intent notificationIntent = new Intent(this, CustomerDashboard.class);
         notificationIntent.setAction("action");
@@ -330,7 +329,9 @@ public class CustomerDashboard extends AppCompatActivity
         NotificationCompat.Builder builder =new NotificationCompat.Builder(this,getString(R.string.channel_id))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText("Welcome to " + getString(R.string.store_name)+ "  an attendant will be with you shortly")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(getString(R.string.pickup_welcome) + " 123 456 "))
+                .setContentText("Welcome to " + getString(R.string.store_name))
                 .setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(R.string.channel_id,builder.build());

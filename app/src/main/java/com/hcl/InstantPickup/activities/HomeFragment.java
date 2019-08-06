@@ -184,18 +184,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void startLocationTracking(){
-        startLocationService();
-                        //sleep needed for request permission callback to be processed to launch location services
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
-                        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
+        ((CustomerDashboard)getActivity()).requestPermissions();
+        //sleep needed for request permission callback to be processed to launch location services
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
+        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
 ;
     }
 
@@ -297,24 +297,17 @@ public class HomeFragment extends Fragment {
             createRowTextView(t_r[i], tv_date[i] , padding, 25, date);
 
             if (demand_type.equals(getString(R.string.ready_pickup))) {
-                Toast.makeText(getActivity(),"Inside",Toast.LENGTH_LONG).show();
                 Button btn = createOnMyWayButton(order);
 
                 t_r[i].addView(btn);
             }
-
             tl.addView(t_r[i], new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.WRAP_CONTENT,
                     TableLayout.LayoutParams.WRAP_CONTENT));
         }
-
-
-
     }
 
 
-    public void startLocationService() {
-        ((CustomerDashboard)getActivity()).requestPermissions();
-    }
+
 
 }

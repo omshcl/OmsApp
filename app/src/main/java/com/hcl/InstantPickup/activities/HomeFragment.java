@@ -217,7 +217,8 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
 
                 change_demand_type_customer_coming(order);
-
+                // Store Ready to pickup Order
+                SingletonClass.getInstance().setReadyOrder(order);
                 startLocationTracking();
 
             }

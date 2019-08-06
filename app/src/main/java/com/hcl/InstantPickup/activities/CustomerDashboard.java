@@ -245,6 +245,41 @@ public class CustomerDashboard extends AppCompatActivity
         });
     }
 
+    private void change_demand_type_customer_ready(JsonObject order){
+        final JsonObject customerObject = new JsonObject();
+        int id = order.get("id").getAsInt();
+
+        customerObject.addProperty("id", id);
+        Call<String> call = apiCalls.customeready(customerObject);
+
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println(response);
+                if (!response.isSuccessful()) {
+
+                    return;
+                }
+
+                String status = response.body();
+
+                if (status.equals("success")) {
+
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to place order", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+
+        });
+    }
+
     private void updateFBApiKey(String username) {
         final String un = username;
         final String[] apiKey = new String[1];
@@ -284,6 +319,10 @@ public class CustomerDashboard extends AppCompatActivity
         Log.i("customer","on picked up called");
 
         Log.i("customer","switched fragment");
+
+        JsonObject order_ready = SingletonClass.getInstance().getReadyOrder();
+        change_demand_type_customer_ready(order_ready);
+
         switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
         Intent notificationIntent = new Intent(this, CustomerDashboard.class);
         notificationIntent.setAction("action");

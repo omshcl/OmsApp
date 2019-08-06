@@ -34,4 +34,7 @@ public interface ApiCalls {
 
     @POST("/orders/customer_coming")
     Call<String> customercoming(@Body JsonObject id);
+
+    @POST("/orders/customer_ready")
+    Call<String> customeready(@Body JsonObject id);
 }

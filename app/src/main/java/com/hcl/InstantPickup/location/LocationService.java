@@ -46,7 +46,7 @@ public class LocationService extends Service {
      */
     @SuppressLint("MissingPermission")
     private void startForeground() {
-        Toast.makeText(this,"service started",Toast.LENGTH_LONG).show();
+        Log.i("location","location service starting");
         Intent notificationIntent = new Intent(this, CustomerDashboard.class);
         notificationIntent.setAction("action");
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
@@ -66,6 +66,7 @@ public class LocationService extends Service {
 
     public void enteredShop() {
         CustomerDashboard dashboard = CustomerDashboard.instance;
+        Log.i("customer","service entered shop triggered");
         if(dashboard != null) {
             dashboard.onPickedup();
         }

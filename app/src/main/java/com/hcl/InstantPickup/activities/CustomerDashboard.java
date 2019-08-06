@@ -56,24 +56,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import android.annotation.SuppressLint;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Binder;
-import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-
-import com.hcl.InstantPickup.R;
-import com.hcl.InstantPickup.activities.CustomerDashboard;
-
 
 public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -145,6 +127,8 @@ public class CustomerDashboard extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent loginIntent = new Intent(getApplicationContext(), Login.class);
+            startActivity(loginIntent);
             return true;
         }
 
@@ -293,7 +277,10 @@ public class CustomerDashboard extends AppCompatActivity
     }
 
     public void onPickedup() {
-        Log.i("customer","onpicked up called");
+        Log.i("customer","on picked up called");
+
+        Log.i("customer","switched fragment");
+        switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
         Intent notificationIntent = new Intent(this, CustomerDashboard.class);
         notificationIntent.setAction("action");
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
@@ -306,17 +293,18 @@ public class CustomerDashboard extends AppCompatActivity
         notificationManager.notify(R.string.channel_id,builder.build());
         Intent stopServiceIntent = new Intent(this, LocationService.class);
         stopService(stopServiceIntent);
-        switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
     }
 
 
     public void requestPermissions() {
+        Log.i("customer","Customer dashboard permission requested");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.i("customer","permission requested callback called");
         Intent newIntent = new Intent(this, LocationService.class);
         startService(newIntent);
     }

@@ -292,7 +292,6 @@ public class HomeFragment extends Fragment {
                         customerObject.addProperty("id", id);
                         Call<String> call = apiCalls.customercoming(customerObject);
 
-
                         call.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
@@ -319,11 +318,19 @@ public class HomeFragment extends Fragment {
 
                         });
 
-                        YourStoreFragment yourStoreFragment = new YourStoreFragment();
-                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), yourStoreFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+
+                        startLocationService();
+                        //sleep needed for request permission callback to be processed to launch location services
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
+                        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
 
                     }
                 });

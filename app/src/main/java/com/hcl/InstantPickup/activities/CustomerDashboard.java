@@ -293,7 +293,10 @@ public class CustomerDashboard extends AppCompatActivity
     }
 
     public void onPickedup() {
-        Log.i("customer","onpicked up called");
+        Log.i("customer","on picked up called");
+
+        Log.i("customer","switched fragment");
+        switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
         Intent notificationIntent = new Intent(this, CustomerDashboard.class);
         notificationIntent.setAction("action");
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
@@ -306,17 +309,18 @@ public class CustomerDashboard extends AppCompatActivity
         notificationManager.notify(R.string.channel_id,builder.build());
         Intent stopServiceIntent = new Intent(this, LocationService.class);
         stopService(stopServiceIntent);
-        switchFragment(FragmentAcitivityConstants.ReadyForPickupFragment);
     }
 
 
     public void requestPermissions() {
+        Log.i("customer","Customer dashboard permission requested");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.i("customer","permission requested callback called");
         Intent newIntent = new Intent(this, LocationService.class);
         startService(newIntent);
     }

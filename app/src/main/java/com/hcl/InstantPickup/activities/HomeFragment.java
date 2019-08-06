@@ -76,13 +76,13 @@ public class HomeFragment extends Fragment {
                     TableLayout t1 = view.findViewById(R.id.table_layout);
                     t1.removeAllViews();
                     is_expand = true;
-                    expand.setText("SHRINK");
+                    expand.setText("SHOW RECENT ORDERS");
                     getOrders(username);
                 }else{
                     TableLayout t1 = view.findViewById(R.id.table_layout);
                     t1.removeAllViews();
                     is_expand = false;
-                    expand.setText("EXPAND");
+                    expand.setText("SHOW ALL ORDERS");
                     getOrders(username);
 
 
@@ -134,16 +134,16 @@ public class HomeFragment extends Fragment {
         }
         Collections.sort( jsonList, new Comparator<JsonObject>() {
             public int compare(JsonObject a, JsonObject b) {
-                String valA = new String();
-                String valB = new String();
-                valA =  a.get("date").getAsString();
-                valB =  b.get("date").getAsString();
+                Integer valA;
+                Integer valB;
+                valA =  a.get("id").getAsInt();
+                valB =  b.get("id").getAsInt();
                 return valA.compareTo(valB);
             }
         });
         for (int i = orders.size() -1; i >= 0; i--) {
             sortedJsonArray.add(jsonList.get(i));
-            System.out.println(jsonList.get(i));
+//            System.out.println(jsonList.get(i));
         }
         return sortedJsonArray;
     }
@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment {
                 TableLayout.LayoutParams.WRAP_CONTENT));
 
         createTextView(tr_head, padding+7, getString(R.string.order_id));
-        createTextView(tr_head, padding+15, getString(R.string.demand_type));
+        createTextView(tr_head, padding+15, "STATUS");
         createTextView(tr_head, padding, getString(R.string.total));
         createTextView(tr_head, padding+25, getString(R.string.date));
         createTextView(tr_head, padding+25, getString(R.string.action));
@@ -272,7 +272,19 @@ public class HomeFragment extends Fragment {
 
         for (int i = 0; i < rows; i++) {
             final JsonObject order = orders.get(i).getAsJsonObject();
-            final String demand_type = order.get("demand_type").getAsString();
+            String demand_type = order.get("demand_type").getAsString();
+
+            if(demand_type.equals(getString(R.string.ready_pickup))) {
+                demand_type="READY";
+            }else if(demand_type.equals("CUSTOMER_COMING")){
+                demand_type = "ARRIVING";
+            }else if(demand_type.equals("OPEN_ORDER")){
+                demand_type = "IN PROGRESS";
+            }else if(demand_type.equals("SCHEDULE_ORDER")){
+                demand_type = "SCHEDULED";
+            }else if(demand_type.equals("COMPLETE_ORDER")){
+                demand_type = "COMPLETE";
+            }
             String total = order.get("total").getAsString();
             String date=order.get("date").getAsString();
             String order_id = order.get("id").toString();
@@ -280,12 +292,12 @@ public class HomeFragment extends Fragment {
             t_r[i] = new TableRow(getActivity());
             t_r[i].setBackgroundColor(Color.WHITE);
             t_r[i].setLayoutParams(params);
-            t_r[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getActivity(),demand_type,Toast.LENGTH_LONG).show();
-                }
-            });
+//            t_r[i].setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+////                    Toast.makeText(getActivity(),demand_type,Toast.LENGTH_LONG).show();
+//                }
+//            });
             tv_order_id[i] = new TextView(getActivity());
             tv_demand_type[i] = new TextView(getActivity());
             tv_total[i] = new TextView(getActivity());

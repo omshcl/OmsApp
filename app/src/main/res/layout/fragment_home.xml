@@ -36,7 +36,7 @@
 
     <Button
         android:id="@+id/expand"
-        android:layout_width="138dp"
-        android:layout_height="wrap_content"
-        android:text="EXPAND" />
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="SHOW ALL ORDERS" />
 </LinearLayout>

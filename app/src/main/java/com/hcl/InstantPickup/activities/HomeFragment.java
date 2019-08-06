@@ -228,7 +228,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void generateOrderTable(JsonArray orders1){
-        JsonArray orders = sortJsonArray(orders1);
+        final JsonArray orders = sortJsonArray(orders1);
 
         int padding = 5;
 
@@ -262,7 +262,7 @@ public class HomeFragment extends Fragment {
 
         for (int i = 0; i < rows; i++) {
             final JsonObject order = orders.get(i).getAsJsonObject();
-            String demand_type = order.get("demand_type").getAsString();
+            final String demand_type = order.get("demand_type").getAsString();
             String total = order.get("total").getAsString();
             String date=order.get("date").getAsString();
             String order_id = order.get("id").toString();
@@ -270,7 +270,12 @@ public class HomeFragment extends Fragment {
             t_r[i] = new TableRow(getActivity());
             t_r[i].setBackgroundColor(Color.WHITE);
             t_r[i].setLayoutParams(params);
-
+            t_r[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(),demand_type,Toast.LENGTH_LONG).show();
+                }
+            });
             tv_order_id[i] = new TextView(getActivity());
             tv_demand_type[i] = new TextView(getActivity());
             tv_total[i] = new TextView(getActivity());
@@ -281,8 +286,10 @@ public class HomeFragment extends Fragment {
             createRowTextView(t_r[i], tv_total[i] , padding, 0, total);
             createRowTextView(t_r[i], tv_date[i] , padding, 25, date);
 
-            if (demand_type.equals(R.string.ready_pickup)) {
+            if (demand_type.equals(getString(R.string.ready_pickup))) {
+                Toast.makeText(getActivity(),"Inside",Toast.LENGTH_LONG).show();
                 Button btn = createOnMyWayButton(order);
+
                 t_r[i].addView(btn);
             }
 

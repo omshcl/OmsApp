@@ -1,6 +1,8 @@
 package com.hcl.InstantPickup.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -182,11 +184,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void startLocationTracking(){
-        YourStoreFragment yourStoreFragment = new YourStoreFragment();
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(((ViewGroup)getView().getParent()).getId(), yourStoreFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        startLocationService();
+                        //sleep needed for request permission callback to be processed to launch location services
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
+                        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+;
     }
 
     private void createTextView(TableRow tr_head, Integer padding, String text){

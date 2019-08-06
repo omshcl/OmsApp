@@ -304,7 +304,7 @@ public class HomeFragment extends Fragment {
             createRowTextView(t_r[i], tv_total[i] , padding, 0, total);
             createRowTextView(t_r[i], tv_date[i] , padding, 25, date);
 
-            if (demand_type.equals("ARRIVING")) {
+            if (demand_type.equals("READY")) {
                 Button btn = createOnMyWayButton(order);
                 t_r[i].setBackgroundColor(Color.GRAY);
                 tv_order_id[i].setTextColor(Color.WHITE);

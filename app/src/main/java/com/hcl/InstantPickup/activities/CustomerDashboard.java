@@ -33,10 +33,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.location.LocationService;
-import com.hcl.InstantPickup.location.LocationTrackingCallback;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.services.ApiCalls;
@@ -48,7 +46,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
-import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -135,6 +132,10 @@ public class CustomerDashboard extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Switches the current fragment and tracks the current fragment so that you can restart the app and it will go back to the same fragment
+     * @param fragmentID
+     */
     public void switchFragment(int fragmentID) {
         Fragment fragment = null;
         currentFragment = fragmentID;
@@ -147,7 +148,6 @@ public class CustomerDashboard extends AppCompatActivity
         } else if (fragmentID == FragmentAcitivityConstants.ReadyForPickupFragment) {
             fragment  = new ReadyForPickupFragment();
         }
-
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

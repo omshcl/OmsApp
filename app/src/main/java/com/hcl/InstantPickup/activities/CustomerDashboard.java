@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -47,6 +48,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
+import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -300,7 +302,7 @@ public class CustomerDashboard extends AppCompatActivity
 
     public void requestPermissions() {
         Log.i("customer","Customer dashboard permission requested");
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -310,5 +312,11 @@ public class CustomerDashboard extends AppCompatActivity
         Log.i("customer","permission requested callback called");
         Intent newIntent = new Intent(this, LocationService.class);
         startForegroundService(newIntent);
+
+        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
+        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 }

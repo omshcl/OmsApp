@@ -185,18 +185,7 @@ public class HomeFragment extends Fragment {
 
     private void startLocationTracking(){
         ((CustomerDashboard)getActivity()).requestPermissions();
-        //sleep needed for request permission callback to be processed to launch location services
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(CustomerDashboard.instance,"Please navigate to " + getString(R.string.store_name) + " and then return to the app",Toast.LENGTH_LONG).show();
-        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?q=Hcl America Frisco");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
-;
+        //Code moved to onRequestPermissionResult
     }
 
     private void createTextView(TableRow tr_head, Integer padding, String text){

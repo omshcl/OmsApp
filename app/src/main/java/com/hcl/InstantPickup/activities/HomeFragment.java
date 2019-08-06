@@ -3,10 +3,12 @@ package com.hcl.InstantPickup.activities;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class HomeFragment extends Fragment {
 
@@ -65,7 +69,7 @@ public class HomeFragment extends Fragment {
         apiCalls = retrofit.create(ApiCalls.class);
         getOrders(username);
 
-        final Button expand=(Button) getView().findViewById(R.id.expand);
+        final Button expand= getView().findViewById(R.id.expand);
         expand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
@@ -207,10 +211,15 @@ public class HomeFragment extends Fragment {
     private Button createOnMyWayButton(JsonObject order1){
         final JsonObject order = order1;
         Button btn = new Button(getActivity());
+
+
         btn.setText(R.string.on_my_way);
-        btn.setWidth(10);
-        btn.setHeight(20);
-        btn.setTextSize(10);
+        btn.setMinHeight(0);
+        btn.setMinWidth(0);
+        btn.setMinimumHeight(0);
+        btn.setMinimumWidth(0);
+        btn.setTextSize(11);
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,8 +244,8 @@ public class HomeFragment extends Fragment {
         TableRow tr_head = new TableRow(getActivity());
         tr_head.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         tr_head.setLayoutParams(new TableLayout.LayoutParams(
-                TableLayout.LayoutParams.WRAP_CONTENT,
-                TableLayout.LayoutParams.WRAP_CONTENT));
+                WRAP_CONTENT,
+                WRAP_CONTENT));
 
         createTextView(tr_head, padding+7, getString(R.string.order_id));
         createTextView(tr_head, padding+15, "STATUS");
@@ -244,7 +253,7 @@ public class HomeFragment extends Fragment {
         createTextView(tr_head, padding+25, getString(R.string.date));
         createTextView(tr_head, padding+25, getString(R.string.action));
 
-        TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
         tl.addView(tr_head, params);
 
         TextView[] tv_order_id = new TextView[orders.size()];
@@ -304,7 +313,7 @@ public class HomeFragment extends Fragment {
             createRowTextView(t_r[i], tv_total[i] , padding, 0, total);
             createRowTextView(t_r[i], tv_date[i] , padding, 25, date);
 
-            if (demand_type.equals("READY")) {
+            if (demand_type.equals("ARRIVING")) {
                 Button btn = createOnMyWayButton(order);
                 t_r[i].setBackgroundColor(Color.GRAY);
                 tv_order_id[i].setTextColor(Color.WHITE);
@@ -314,8 +323,8 @@ public class HomeFragment extends Fragment {
                 t_r[i].addView(btn);
             }
             tl.addView(t_r[i], new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.WRAP_CONTENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT));
+                    WRAP_CONTENT,
+                    WRAP_CONTENT));
         }
     }
 

@@ -1,8 +1,7 @@
 package com.hcl.InstantPickup.activities;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -188,12 +186,14 @@ public class HomeFragment extends Fragment {
         //Code moved to onRequestPermissionResult
     }
 
+    @SuppressLint("ResourceAsColor")
     private void createTextView(TableRow tr_head, Integer padding, String text){
         TextView t_v = new TextView(getActivity());
         t_v.setText(text);
         t_v.setTextColor(Color.WHITE);          // part2
         t_v.setPadding(padding, padding, padding, padding);
         tr_head.addView(t_v);// add the column to the table row here
+        tr_head.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
 
     private void createRowTextView(TableRow tr_head, TextView t_v, Integer padding, Integer rightpadding, String text){
@@ -281,7 +281,11 @@ public class HomeFragment extends Fragment {
 
             t_r[i] = new TableRow(getActivity());
             t_r[i].setBackgroundColor(Color.WHITE);
+            t_r[i].setPadding(0,20,0,20);
             t_r[i].setLayoutParams(params);
+
+
+            //t_r[i].setBackgroundColor(Color.GREEN);
 //            t_r[i].setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -293,14 +297,20 @@ public class HomeFragment extends Fragment {
             tv_total[i] = new TextView(getActivity());
             tv_date[i] = new TextView(getActivity());
             // Here create the TextView dynamically
+
+
             createRowTextView(t_r[i], tv_order_id[i], padding, 0, order_id);
             createRowTextView(t_r[i], tv_demand_type[i] , padding, 25, demand_type);
             createRowTextView(t_r[i], tv_total[i] , padding, 0, total);
             createRowTextView(t_r[i], tv_date[i] , padding, 25, date);
 
-            if (demand_type.equals("READY")) {
+            if (demand_type.equals("ARRIVING")) {
                 Button btn = createOnMyWayButton(order);
-
+                t_r[i].setBackgroundColor(Color.GRAY);
+                tv_order_id[i].setTextColor(Color.WHITE);
+                tv_date[i].setTextColor(Color.WHITE);
+                tv_demand_type[i].setTextColor(Color.WHITE);
+                tv_total[i].setTextColor(Color.WHITE);
                 t_r[i].addView(btn);
             }
             tl.addView(t_r[i], new TableLayout.LayoutParams(

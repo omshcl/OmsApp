@@ -200,7 +200,7 @@ public class HomeFragment extends Fragment {
         t_v.setText(text);
         t_v.setTextColor(Color.BLACK);          // part2
         t_v.setPadding(padding, padding, padding+rightpadding, padding);
-        t_v.setTextSize(14);
+        t_v.setTextSize(15);
         tr_head.addView(t_v);// add the column to the table row here
     }
 
@@ -210,7 +210,7 @@ public class HomeFragment extends Fragment {
         btn.setText(R.string.on_my_way);
         btn.setWidth(10);
         btn.setHeight(20);
-        btn.setTextSize(10);
+        btn.setTextSize(12);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,7 +274,10 @@ public class HomeFragment extends Fragment {
                 demand_type = "SCHEDULED";
             }else if(demand_type.equals("COMPLETE_ORDER")){
                 demand_type = "COMPLETE";
+            }else if(demand_type.equals("CUSTOMER_READY")){
+                demand_type = "REACHED";
             }
+
             String total = order.get("total").getAsString();
             String date=order.get("date").getAsString();
             String order_id = order.get("id").toString();

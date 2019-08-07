@@ -15,6 +15,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.activities.Login;
 
+/** Makes use of Firebase service
+ * to handle notifications for the app
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 //FirebaseMessagingService used to receive push notifications
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override

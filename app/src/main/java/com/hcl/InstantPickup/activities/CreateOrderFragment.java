@@ -36,6 +36,11 @@ import retrofit2.Retrofit;
 import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/** Creates Create Dashboard of the application
+ * Customer can create new orders here
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class CreateOrderFragment extends Fragment {
     private ApiCalls apiCalls; // instance of ApiCalls class to make REST GET/POST requests
     private Map<String, Item> itemMap; // map of available items queried from the backend
@@ -129,6 +134,9 @@ public class CreateOrderFragment extends Fragment {
         });
     }
 
+    /** Gets Items available list from backend
+     * @param view Current Fragement view
+     */
     // get list of items from backend to create spinner
     private void getItems(final View view) {
         Call<JsonArray> call = apiCalls.getItems();
@@ -161,6 +169,10 @@ public class CreateOrderFragment extends Fragment {
         });
     }
 
+    /** Displays the list received from backend
+     * in a dropdown menu
+     * @param view Current Fragement view
+     */
     // create spinner element to select items
     private void createSpinner(View view) {
         spinner = (Spinner) view.findViewById(R.id.itemSpinner);
@@ -178,6 +190,10 @@ public class CreateOrderFragment extends Fragment {
         spinner.setAdapter(dataAdapter);
     }
 
+    /** Creates option to increment or decrement
+     * item quantity
+     * @param view Current Fragement view
+     */
     // add item to the shopping cart
     public void addItem(View view) {
         // make sure quantity field is not empty
@@ -195,6 +211,10 @@ public class CreateOrderFragment extends Fragment {
         }
     }
 
+    /** Generates hardcoded orderform to be sent
+     * to backend to store a new order
+     * @param
+     */
     // create a JsonObject to send in our post request to create a new order
     private JsonObject createOrderForm() {
         JsonObject orderFormObject = new JsonObject();

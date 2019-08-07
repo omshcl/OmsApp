@@ -13,14 +13,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Create Pickup Order"
+        android:text="@string/create_pickup_order"
         android:textSize="30sp" />
     <TextView
         android:id="@+id/selectItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Select an Item:"
+        android:text="@string/select_an_item"
         android:layout_marginBottom="5dp"
         android:layout_below="@id/title" />
     <TextView
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Quantity:"
+        android:text="@string/quantity"
         android:layout_marginBottom="5dp"
         android:layout_below="@id/title"
         android:layout_toRightOf="@id/itemSpinner"/>
@@ -46,7 +46,7 @@
         android:ems="8"
         android:gravity="center_horizontal"
         android:inputType="number"
-        android:text="1"
+        android:text="@string/_1"
         android:layout_alignBaseline="@id/itemSpinner"
         android:layout_below="@id/quantityLabel"
         android:layout_toRightOf="@id/itemSpinner"/>
@@ -58,14 +58,14 @@
         android:layout_marginLeft="10dp"
         android:layout_alignBaseline="@id/quantity"
         android:layout_alignParentRight="true"
-        android:text="Add" />
+        android:text="@string/add" />
     <TextView
         android:id="@+id/total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="20dp"
-        android:text="Total: $0"
+        android:text="@string/total_0"
         android:layout_above="@id/createOrderButton"/>
     <Button
         android:id="@+id/createOrderButton"
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:text="Create Order"
+        android:text="@string/create_order"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="115dp" />
 

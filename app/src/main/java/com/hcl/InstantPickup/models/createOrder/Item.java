@@ -1,5 +1,11 @@
 package com.hcl.InstantPickup.models.createOrder;
 
+/** Used to handle Items list
+ * API call
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
+//simple Item class for creating orders
 public class Item {
     private int id;
     private String shortDescription;
@@ -7,6 +13,7 @@ public class Item {
     private int price;
     private int quantity;
 
+    //Constructor for when there is no quantity specified
     public Item(int id, String shortDescription, String longDescription, int price) {
         this.id = id;
         this.shortDescription = shortDescription;
@@ -15,6 +22,7 @@ public class Item {
         this.quantity = 0;
     }
 
+    //Constructor for when there is a quantity specified
     public Item(Item baseItem, int quantity) {
         this.id = baseItem.getID();
         this.shortDescription = baseItem.getShortDescription();
@@ -23,6 +31,7 @@ public class Item {
         this.quantity = quantity;
     }
 
+    //Getters and Setters
     public int getID() {
         return this.id;
     }
@@ -31,9 +40,7 @@ public class Item {
         return this.shortDescription;
     }
 
-    public String getLongDescription() {
-        return this.longDescription;
-    }
+    public String getLongDescription() { return this.longDescription; }
 
     public int getPrice() {
         return this.price;

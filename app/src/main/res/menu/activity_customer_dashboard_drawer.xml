@@ -11,11 +11,11 @@
         <item
             android:id="@+id/nav_createorder"
             android:icon="@drawable/ic_shopping_cart"
-            android:title="Create Order" />
+            android:title="@string/create_order" />
         <item
             android:id="@+id/nav_yourstore"
             android:icon="@drawable/ic_place"
-            android:title="Your Store" />
+            android:title="@string/your_store" />
     </group>
 
 

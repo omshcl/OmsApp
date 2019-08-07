@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Welcome to"
+        android:text="@string/welcome_to"
         android:textAlignment="center"
         android:textSize="30sp" />
 
@@ -45,6 +45,6 @@
         android:id="@+id/expand"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:text="SHOW ALL ORDERS" />
+        android:text="@string/show_all_orders" />
 </LinearLayout>
 </ScrollView>

@@ -12,7 +12,12 @@ import androidx.fragment.app.Fragment;
 
 import com.hcl.InstantPickup.R;
 
-
+/**
+ * Creates a fragment to display message
+ * to customer when he/she reaches the store
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class ReadyForPickupFragment extends Fragment {
 
     @Nullable
@@ -25,11 +30,11 @@ public class ReadyForPickupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Intent intent = new Intent(view.getContext(), CustomerDashboard.class);
         super.onViewCreated(view, savedInstanceState);
-        Button button = (Button) getView().findViewById(R.id.complete);
+        Button button = getView().findViewById(R.id.complete);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 CustomerDashboard dashboard = CustomerDashboard.instance;
-                if(dashboard != null) {
+                if (dashboard != null) {
                     dashboard.switchFragment(FragmentAcitivityConstants.HomeFragmentId);
                 }
             }
@@ -37,11 +42,4 @@ public class ReadyForPickupFragment extends Fragment {
 
 
     }
-
-    public void onPickedUp(View view) {
-
-    }
-
-
-
 }

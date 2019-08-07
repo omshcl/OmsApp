@@ -31,7 +31,33 @@
     <string name="date">DATE</string>
     <string name="element_text">Element</string>
     <string name="pickup_welcome">An attendant will be with you shortly. Please tell the attendant your order code:</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="your_store">Your Store</string>
+    <string name="omscurbside">OMS CURBSIDE PICKUP</string>
+    <string name="completedpickup">Completed Pickup</string>
+    <string name="ordercode">123 456</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="show_all_orders">SHOW ALL ORDERS</string>
+    <string name="create_pickup_order">Create Pickup Order</string>
+    <string name="create_order">Create Order</string>
+    <string name="select_an_item">Select an Item:</string>
+    <string name="quantity">Quantity:</string>
+    <string name="_1">1</string>
+    <string name="add">Add</string>
+    <string name="total_0">Total: $0</string>
+    <string name="password">password</string>
+    <string name="bbagel">bbagel</string>
+    <string name="ready">READY</string>
+    <string name="show_recent_orders">SHOW RECENT ORDERS</string>
+    <string name="status">STATUS</string>
+    <string name="customer_coming">CUSTOMER_COMING</string>
+    <string name="open_order">OPEN_ORDER</string>
+    <string name="schedule_order">SCHEDULE_ORDER</string>
+    <string name="complete_order">COMPLETE_ORDER</string>
+    <string name="customer_ready">CUSTOMER_READY</string>
+    <string name="arriving">ARRIVING</string>
+    <string name="progress">IN PROGRESS</string>
+    <string name="scheduled">SCHEDULED</string>
+    <string name="complete">COMPLETE</string>
+    <string name="reached">REACHED</string>
 </resources>

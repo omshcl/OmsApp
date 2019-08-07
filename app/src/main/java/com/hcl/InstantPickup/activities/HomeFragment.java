@@ -31,6 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+/** Creates a home fragment to display the order history of a customer.
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class HomeFragment extends Fragment {
 
     private ApiCalls apiCalls;
@@ -92,6 +96,10 @@ public class HomeFragment extends Fragment {
 
     }
 
+    /** Gets the order history of the logged in user
+     * Makes API call to backend
+     * @param name The logged in user's username
+     */
     private void getOrders(String name) {
 
         final JsonObject username = new JsonObject();
@@ -122,6 +130,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /** Sorts the order history received from backend
+     *  by orderId (Recent order first)
+     * @param orders Array of orders
+     */
     private JsonArray sortJsonArray(JsonArray orders){
         JsonArray sortedJsonArray = new JsonArray();
         List<JsonObject> jsonList = new ArrayList<>();
@@ -144,6 +156,11 @@ public class HomeFragment extends Fragment {
         return sortedJsonArray;
     }
 
+    /** Changes demand type of the order to CUSTOMER_COMING
+     *  Makes API call to change demand_type when user clicks
+     *  'ON_MY_WAY' button
+     * @param order Current order which is ready to pickup
+     */
     private void change_demand_type_customer_coming(JsonObject order){
         final JsonObject customerObject = new JsonObject();
         int id = order.get("id").getAsInt();
@@ -179,6 +196,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /** Starts location tracking service
+     *  once user presses 'ON_MY_WAY' button
+     * @param
+     */
     private void startLocationTracking(){
         ((CustomerDashboard)getActivity()).requestPermissions();
         //Code moved to onRequestPermissionResult
@@ -194,6 +215,14 @@ public class HomeFragment extends Fragment {
         tr_head.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
 
+    /** Adds new row to the table
+     *  Makes API call to change demand_type when user is
+     *  within the given radius of the store
+     * @param tr_head Table header
+     * @param t_v Table Column text view
+     * @param padding Table cell padding
+     * @param text Table cell text
+     */
     private void createRowTextView(TableRow tr_head, TextView t_v, Integer padding, Integer rightpadding, String text){
         t_v.setText(text);
         t_v.setTextColor(Color.BLACK);          // part2
@@ -202,6 +231,11 @@ public class HomeFragment extends Fragment {
         tr_head.addView(t_v);// add the column to the table row here
     }
 
+    /** Creates 'ON_MY_WAY' button
+     *  function called when demand_type changes
+     *  to 'READY_PICKUP'
+     * @param
+     */
     private Button createOnMyWayButton(JsonObject order1){
         final JsonObject order = order1;
         Button btn = new Button(getActivity());
@@ -230,6 +264,10 @@ public class HomeFragment extends Fragment {
         return btn;
     }
 
+    /** Creates new Table Layout to display
+     * order history of the customer
+     * @param
+     */
     private void generateOrderTable(JsonArray orders1){
         final JsonArray orders = sortJsonArray(orders1);
 
@@ -242,7 +280,7 @@ public class HomeFragment extends Fragment {
                 WRAP_CONTENT));
 
         createTextView(tr_head, padding+7, getString(R.string.order_id));
-        createTextView(tr_head, padding+15, "STATUS");
+        createTextView(tr_head, padding+15, getString(R.string.status));
         createTextView(tr_head, padding, getString(R.string.total));
         createTextView(tr_head, padding+25, getString(R.string.date));
         createTextView(tr_head, padding+25, getString(R.string.action));
@@ -268,17 +306,17 @@ public class HomeFragment extends Fragment {
             String demand_type = order.get("demand_type").getAsString();
 
             if(demand_type.equals(getString(R.string.ready_pickup))) {
-                demand_type="READY";
-            }else if(demand_type.equals("CUSTOMER_COMING")){
-                demand_type = "ARRIVING";
-            }else if(demand_type.equals("OPEN_ORDER")){
-                demand_type = "IN PROGRESS";
-            }else if(demand_type.equals("SCHEDULE_ORDER")){
-                demand_type = "SCHEDULED";
-            }else if(demand_type.equals("COMPLETE_ORDER")){
-                demand_type = "COMPLETE";
-            }else if(demand_type.equals("CUSTOMER_READY")){
-                demand_type = "REACHED";
+                demand_type=getString(R.string.ready);
+            }else if(demand_type.equals(getString(R.string.customer_coming))){
+                demand_type = getString(R.string.arriving);
+            }else if(demand_type.equals(getString(R.string.open_order))){
+                demand_type = getString(R.string.progress);
+            }else if(demand_type.equals(getString(R.string.schedule_order))){
+                demand_type = getString(R.string.scheduled);
+            }else if(demand_type.equals(getString(R.string.complete_order))){
+                demand_type = getString(R.string.complete);
+            }else if(demand_type.equals(getString(R.string.customer_ready))){
+                demand_type = getString(R.string.reached);
             }
 
             String total = order.get("total").getAsString();
@@ -303,7 +341,7 @@ public class HomeFragment extends Fragment {
             createRowTextView(t_r[i], tv_total[i] , padding, 0, total);
             createRowTextView(t_r[i], tv_date[i] , padding, 25, date);
 
-            if (demand_type.equals("READY")) {
+            if (demand_type.equals(getString(R.string.ready))) {
                 Button btn = createOnMyWayButton(order);
                 t_r[i].setBackgroundColor(Color.GRAY);
                 tv_order_id[i].setTextColor(Color.WHITE);

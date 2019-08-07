@@ -6,7 +6,6 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
-import static com.hcl.InstantPickup.location.LocationConstants.myShopLong;
 
 /** Creates a location listner class
  * to constantly monitor the user's location

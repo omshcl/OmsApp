@@ -2,22 +2,15 @@ package com.hcl.InstantPickup.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.login.LoginPost;
 import com.hcl.InstantPickup.models.login.LoginStatus;
 import com.hcl.InstantPickup.services.ApiCalls;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,7 +82,7 @@ public class Login extends AppCompatActivity {
                     EditText username = findViewById(R.id.username);
                     System.out.println(username.getText().toString());
                     Intent createOrderIntent = new Intent(getApplicationContext(), CustomerDashboard.class);
-                    createOrderIntent.putExtra("Username", username.getText().toString());
+                    createOrderIntent.putExtra("username", username.getText().toString());
                     startActivity(createOrderIntent);
                     Toast toast = Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);

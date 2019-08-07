@@ -2,34 +2,24 @@ package com.hcl.InstantPickup.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import com.google.android.gms.maps.GoogleMap;
-
-import android.os.IBinder;
 import android.util.Log;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import android.view.MenuItem;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -40,16 +30,13 @@ import com.hcl.InstantPickup.location.LocationService;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.services.ApiCalls;
-
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.Menu;
 import android.widget.Toast;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,7 +63,7 @@ public class CustomerDashboard extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_dashboard);
         Intent i = getIntent();
-        String username = i.getStringExtra("Username");
+        String username = i.getStringExtra("username");
         System.out.println(username);
         SingletonClass.getInstance().setName(username);
         Retrofit retrofit = new Retrofit.Builder()
@@ -168,7 +155,6 @@ public class CustomerDashboard extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        Fragment fragment = null;
         int id = item.getItemId();
         int fragmentId = FragmentAcitivityConstants.HomeFragmentId;
         if (id == R.id.nav_home) {
@@ -248,7 +234,7 @@ public class CustomerDashboard extends AppCompatActivity
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-//                textViewResult.setText(t.getMessage());
+
                 System.out.println(t.getMessage());
             }
         });

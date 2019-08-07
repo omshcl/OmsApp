@@ -1,6 +1,5 @@
 package com.hcl.InstantPickup.models.createOrder;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,29 +21,23 @@ import java.util.List;
  * @author HCL Intern Team
  * @version 1.0.0
  */
+//Adapter class to be used with the RecyclerView in CreateOrderFragment
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>{
-    private List<Item> dataSet;
-    private final TextView totalTV;
+    private List<Item> dataSet; //dataset for storing items in the order form
+    private final TextView totalTV; //textview to update the total field in CreateOrderFragment
 
+    //ViewHolder used to display each row in the order form
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        private final TextView itemNameTV;
-        private final TextView itemPriceTV;
-        private final TextView itemQuantityTV;
-        private final ImageView subQuantityIV;
-        private final ImageView addQuantityIV;
-        private final TextView itemSubtotalTV;
-        private final ImageView removeItemIV;
-
+        private final TextView itemNameTV; //name of item
+        private final TextView itemPriceTV; //price of item
+        private final TextView itemQuantityTV; //quantity of item
+        private final ImageView subQuantityIV; //button to subtract quantity
+        private final ImageView addQuantityIV; //button to add quantity
+        private final TextView itemSubtotalTV; //subtotal of item
+        private final ImageView removeItemIV; //button to remove item from order form
 
         public MyViewHolder(View v) {
             super(v);
-            // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("MVH", "Element " + getAdapterPosition() + " clicked.");
-                }
-            });
             itemNameTV = (TextView) v.findViewById(R.id.itemName);
             itemPriceTV = (TextView) v.findViewById(R.id.itemPrice);
             itemQuantityTV = (TextView) v.findViewById(R.id.itemQuantity);
@@ -53,10 +46,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             itemSubtotalTV = (TextView) v.findViewById(R.id.itemSubtotal);
             removeItemIV = (ImageView) v.findViewById(R.id.removeItem);
         }
-
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    //Constructor to pass in total textview and initialize dataset
     public ItemListAdapter(TextView totalTV) {
         this.totalTV = totalTV;
         dataSet = new ArrayList<>();
@@ -74,16 +66,20 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        //retrieve values form dataSet
         String shortDescription = dataSet.get(position).getShortDescription();
         int quantity = dataSet.get(position).getQuantity();
         final int price = dataSet.get(position).getPrice();
         int subtotal = quantity * price;
+        //set text fields in viewholder to retreived values
         holder.itemNameTV.setText(shortDescription);
         holder.itemPriceTV.setText("$"+String.valueOf(price));
         holder.itemQuantityTV.setText(String.valueOf(quantity));
+        //setOnClickListener for subtracting quantity
         holder.subQuantityIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //decrement quantity and update total
                 int curQty = dataSet.get(position).getQuantity();
                 if(curQty > 1) {
                     dataSet.get(position).setQuantity(curQty - 1);
@@ -94,9 +90,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
                 notifyDataSetChanged();
             }
         });
+        //setOnClickListener for adding quantity
         holder.addQuantityIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //increment quantity and update total
                 int curQty = dataSet.get(position).getQuantity();
                 dataSet.get(position).setQuantity(curQty+1);
                 notifyDataSetChanged();
@@ -106,9 +104,11 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             }
         });
         holder.itemSubtotalTV.setText("$"+String.valueOf(subtotal));
+        //setOnclickListener for removing item from order form
         holder.removeItemIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //remove item from dataset and update total
                 int subtotal = dataSet.get(position).getPrice() * dataSet.get(position).getQuantity();
                 dataSet.remove(position);
                 notifyDataSetChanged();
@@ -124,7 +124,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
         return dataSet.size();
     }
 
+    //add item to order form
     public void addItem(Item item) {
+        //if the item already exists on the order form, just update the quantity
         for(Item existingItem : dataSet) {
             if(existingItem.getShortDescription().equals(item.getShortDescription())) {
                 int curQuantity = existingItem.getQuantity();
@@ -134,10 +136,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
                 return;
             }
         }
+        //else add the item as a new entry to the order form
         dataSet.add(item);
         notifyDataSetChanged();
     }
 
+    //create JsonArray of itemid:price for creating order JsonObject
     public JsonArray getPrices() {
         JsonArray priceList = new JsonArray();
         for(Item curItem: dataSet) {
@@ -149,6 +153,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
         return priceList;
     }
 
+    //create JsonArray of itemid:quantity for creating order JsonObject
     public JsonArray getQuantities() {
         JsonArray quantityList = new JsonArray();
         for(Item curItem: dataSet) {

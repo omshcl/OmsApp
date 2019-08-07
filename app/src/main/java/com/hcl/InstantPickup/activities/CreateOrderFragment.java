@@ -7,39 +7,30 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.services.ApiCalls;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.models.createOrder.Item;
 import com.hcl.InstantPickup.models.createOrder.ItemListAdapter;
-import com.hcl.InstantPickup.services.ApiCalls;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -64,7 +55,6 @@ public class CreateOrderFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Intent intent = new Intent(view.getContext(), CustomerDashboard.class);
         super.onViewCreated(view, savedInstanceState);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(getString(R.string.backend_url))
@@ -117,10 +107,6 @@ public class CreateOrderFragment extends Fragment {
                             Toast toast = Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                             toast.show();
-                            Bundle b = new Bundle();
-                            b.putString("address", paramObject.get("address").getAsString());
-                            b.putString("shipnode",paramObject.get("shipnode").getAsString());
-                            b.putString("total",paramObject.get("total").getAsString());
                             CustomerDashboard dashboard = CustomerDashboard.instance;
                             if(dashboard != null) {
                                 dashboard.switchFragment(FragmentAcitivityConstants.HomeFragmentId);

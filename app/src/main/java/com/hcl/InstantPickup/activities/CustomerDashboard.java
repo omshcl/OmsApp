@@ -37,6 +37,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.Toast;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -291,7 +294,13 @@ public class CustomerDashboard extends AppCompatActivity implements NavigationVi
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        apiKey[0] = task.getResult().getToken();
+                        apiKey[0] = "";
+                        try {
+                            apiKey[0] = task.getResult().getToken();
+                        }
+                        catch(Exception e) {
+                            Log.e("API KEY FAIL",e.getMessage());
+                        }
                         Log.e("API Key", apiKey[0]);
                         JsonObject usernameObject = new JsonObject();
                         usernameObject.addProperty("username", un);
@@ -314,6 +323,7 @@ public class CustomerDashboard extends AppCompatActivity implements NavigationVi
                                 Log.e("FBApiKey Failure", t.getMessage());
                             }
                         });
+
                     }
                 });
     }

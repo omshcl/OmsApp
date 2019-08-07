@@ -194,8 +194,7 @@ public class CustomerDashboard extends AppCompatActivity
         }
     }
 
-
-
+    //queries the customers table to obtain details (firstname, lastname, etc) and update SingletonClass
     public void setVariables(String username) {
         JsonObject usernameObject = new JsonObject();
         usernameObject.addProperty("username", username);
@@ -207,7 +206,7 @@ public class CustomerDashboard extends AppCompatActivity
                     Log.e("CD:setVariables()","Response Code"+response.code());
                     return;
                 }
-                // Request is successful
+                // Request is successful, update SingletonClass
                 JsonObject userInfo = response.body();
                 String firstname = userInfo.get("firstname").getAsString();
                 SingletonClass.getInstance().setFirstName(firstname);
@@ -225,7 +224,6 @@ public class CustomerDashboard extends AppCompatActivity
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
                 System.out.println(t.getMessage());
             }
         });
@@ -266,6 +264,7 @@ public class CustomerDashboard extends AppCompatActivity
         });
     }
 
+    //gets the user's current FBApiKey and updates the backend with it
     private void updateFBApiKey(String username) {
         final String un = username;
         final String[] apiKey = new String[1];

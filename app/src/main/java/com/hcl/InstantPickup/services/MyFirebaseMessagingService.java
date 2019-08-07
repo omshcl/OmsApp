@@ -20,6 +20,7 @@ import com.hcl.InstantPickup.activities.Login;
  * @author HCL Intern Team
  * @version 1.0.0
  */
+//FirebaseMessagingService used to receive push notifications
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
@@ -30,6 +31,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e("MFMS","onMessageReceived");
+        //create notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String description = "Firebase Push Notifications";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -39,6 +41,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
+        //create and display notification
         Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);

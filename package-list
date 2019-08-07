@@ -1,0 +1,7 @@
+com.hcl.InstantPickup
+com.hcl.InstantPickup.activities
+com.hcl.InstantPickup.location
+com.hcl.InstantPickup.models
+com.hcl.InstantPickup.models.createOrder
+com.hcl.InstantPickup.models.login
+com.hcl.InstantPickup.services

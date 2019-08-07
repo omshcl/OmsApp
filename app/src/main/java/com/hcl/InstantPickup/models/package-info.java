@@ -1,7 +1,7 @@
 
 /**
- * Holds application activites and fragment classes
+ * Holds model classes related to activities and fragments
  * @author HCL Intern team
  * @version 1.0.0
  */
-package com.hcl.InstantPickup.activities;
+package com.hcl.InstantPickup.models;

@@ -1,11 +1,7 @@
 
 /**
- * Domain classes used to produce the JSON and XML output for the RESTful services.
- * <p>
- * These classes contain the JAXB annotations.
- *
- * @since 1.0
- * @author jwhite
- * @version 1.1
+ * Holds application activites and fragment classes
+ * @author HCL Intern team
+ * @version 1.0.0
  */
 package com.hcl.InstantPickup.activities;

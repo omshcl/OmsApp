@@ -18,6 +18,10 @@ import com.hcl.InstantPickup.R;
 import java.util.ArrayList;
 import java.util.List;
 
+ /** Creates Item list adapter
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>{
     private List<Item> dataSet;
     private final TextView totalTV;

@@ -12,6 +12,11 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+/** Makes use of RETROFIT library
+ * to make REST Api calls to the backend
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public interface ApiCalls {
 
     @POST("customer/login")

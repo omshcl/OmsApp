@@ -46,6 +46,11 @@ import retrofit2.Retrofit;
 import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/** Creates Create Dashboard of the application
+ * Customer can create new orders here
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class CreateOrderFragment extends Fragment {
     private ApiCalls apiCalls;
     private Map<String, Item> itemMap;
@@ -139,6 +144,9 @@ public class CreateOrderFragment extends Fragment {
         });
     }
 
+    /** Gets Items available list from backend
+     * @param view Current Fragement view
+     */
     private void getItems(final View view) {
         Call<JsonArray> call = apiCalls.getItems();
         call.enqueue(new Callback<JsonArray>() {
@@ -171,6 +179,10 @@ public class CreateOrderFragment extends Fragment {
         });
     }
 
+    /** Displays the list received from backend
+     * in a dropdown menu
+     * @param view Current Fragement view
+     */
     private void createSpinner(View view) {
         spinner = (Spinner) view.findViewById(R.id.itemSpinner);
         // Spinner click listener
@@ -187,6 +199,10 @@ public class CreateOrderFragment extends Fragment {
         spinner.setAdapter(dataAdapter);
     }
 
+    /** Creates option to increment or decrement
+     * item quantity
+     * @param view Current Fragement view
+     */
     public void addItem(View view) {
         if(!qtyTextView.getText().toString().isEmpty()) {
             int quantity = Integer.valueOf(qtyTextView.getText().toString());
@@ -200,6 +216,10 @@ public class CreateOrderFragment extends Fragment {
         }
     }
 
+    /** Generates hardcoded orderform to be sent
+     * to backend to store a new order
+     * @param
+     */
     private JsonObject createOrderForm() {
         JsonObject orderFormObject = new JsonObject();
         JsonArray quantityList = mAdapter.getQuantities();

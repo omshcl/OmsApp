@@ -24,6 +24,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/** Creates a Login Activity to enable
+ * validation for user
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class Login extends AppCompatActivity {
 
     private ApiCalls apiCalls;
@@ -39,6 +44,10 @@ public class Login extends AppCompatActivity {
         apiCalls = retrofit.create(ApiCalls.class);
     }
 
+    /** Gets username and password
+     * and calls a function for validation
+     * @param view Cuurent view of activity
+     */
     public void login(View view) {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
@@ -47,6 +56,11 @@ public class Login extends AppCompatActivity {
         loginPost(user, pass);
     }
 
+    /** Makes API call to backend to check for
+     * user credentials
+     * @param user username
+     * @param pass password
+     */
     private void loginPost(final String user, String pass) {
 
         // Create an instance of model class LoginPost

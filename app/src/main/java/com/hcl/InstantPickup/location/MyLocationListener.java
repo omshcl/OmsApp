@@ -8,6 +8,11 @@ import android.util.Log;
 
 import static com.hcl.InstantPickup.location.LocationConstants.myShopLong;
 
+/** Creates a location listner class
+ * to constantly monitor the user's location
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class MyLocationListener implements LocationListener {
 
     private Context mContext;
@@ -32,6 +37,12 @@ public class MyLocationListener implements LocationListener {
         }
     }
 
+    /** Comptues distance between location co-ordinates
+     * @param lat1 Store latitude
+     * @param lon1 Store longitude
+     * @param lat2 User latitude
+     * @param lon2 User longitude
+     */
     private static double haversine(double lat1, double lon1, double lat2, double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);

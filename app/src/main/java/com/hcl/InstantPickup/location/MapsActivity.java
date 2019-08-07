@@ -12,6 +12,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/** Creates a Map activity to display
+ * google maps with store location
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;

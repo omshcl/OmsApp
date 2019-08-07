@@ -1,5 +1,10 @@
 package com.hcl.InstantPickup.models.createOrder;
 
+/** Used to handle Items list
+ * API call
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class Item {
     private int id;
     private String shortDescription;

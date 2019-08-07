@@ -18,6 +18,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.location.LocationConstants;
 
+/** Creates a fragment to display maps activity
+ * with store location
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class YourStoreFragment extends Fragment  {
   
     @Override

@@ -56,7 +56,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
+/** Creates Main Dashboard of the application
+ * Can switch to different fragments from here
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class CustomerDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -192,6 +196,9 @@ public class CustomerDashboard extends AppCompatActivity
         savedInstanceState.putInt("activeFragment", currentFragment);
     }
 
+    /** Creates a notification channel with the app
+     * @param
+     */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -209,7 +216,9 @@ public class CustomerDashboard extends AppCompatActivity
     }
 
 
-
+    /** Stores user information globally to be accessed across different classes
+     * @param username The logged in user's username
+     */
     public void setVariables(String username) {
         JsonObject usernameObject = new JsonObject();
         usernameObject.addProperty("username", username);
@@ -245,6 +254,11 @@ public class CustomerDashboard extends AppCompatActivity
         });
     }
 
+    /** Changes demand type of the order to CUSTOMER_READY
+     *  Makes API call to change demand_type when user is
+     *  within the given radius of the store
+     * @param order Current order which is ready to pickup
+     */
     private void change_demand_type_customer_ready(JsonObject order){
         final JsonObject customerObject = new JsonObject();
         int id = order.get("id").getAsInt();
@@ -280,6 +294,10 @@ public class CustomerDashboard extends AppCompatActivity
         });
     }
 
+
+    /** Updates the Firebase API Key
+     * @param username Logged in user's username
+     */
     private void updateFBApiKey(String username) {
         final String un = username;
         final String[] apiKey = new String[1];
@@ -312,9 +330,14 @@ public class CustomerDashboard extends AppCompatActivity
                         });
                     }
                 });
-
     }
 
+    /** Triggers when user reaches within the
+     *  given readius of the store
+     *  Notifies the backend that customer has arrived
+     *  and sends notification
+     * @param
+     */
     public void onPickedup() {
         Log.i("customer","on picked up called");
 
@@ -339,7 +362,9 @@ public class CustomerDashboard extends AppCompatActivity
         stopService(stopServiceIntent);
     }
 
-
+    /** Asks user permission to start location tracking
+     * @param
+     */
     public void requestPermissions() {
         Log.i("customer","Customer dashboard permission requested");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1);

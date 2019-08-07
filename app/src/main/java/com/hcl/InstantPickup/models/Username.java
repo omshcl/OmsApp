@@ -1,5 +1,9 @@
 package com.hcl.InstantPickup.models;
 
+/** Used to handle username GET Request
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class Username {
     public String username;
 

@@ -2,6 +2,11 @@ package com.hcl.InstantPickup.location;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/** Stores constant values used
+ * for location tracking
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class LocationConstants {
     public final static double myShopLat = 33.09948150944979;
     public final static double myShopLong = -96.8288957057522;

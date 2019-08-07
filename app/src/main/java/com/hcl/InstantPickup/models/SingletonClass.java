@@ -4,6 +4,12 @@ import android.app.Application;
 
 import com.google.gson.JsonObject;
 
+/** Stores global values to
+ * be accesed across all classes
+ * inside the project
+ * @author HCL Intern Team
+ * @version 1.0.0
+ */
 public class SingletonClass extends Application {
 
     private static SingletonClass instance;

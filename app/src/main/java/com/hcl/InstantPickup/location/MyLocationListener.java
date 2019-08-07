@@ -6,7 +6,6 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
-import static com.hcl.InstantPickup.location.LocationConstants.myShopLong;
 
 public class MyLocationListener implements LocationListener {
 

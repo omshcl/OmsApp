@@ -3,32 +3,26 @@ package com.hcl.InstantPickup.activities;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
 import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.services.ApiCalls;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -122,8 +116,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-//                textViewResult.setText(t.getMessage());
-                System.out.println(t.getMessage());
+
+
             }
         });
     }
@@ -145,7 +139,7 @@ public class HomeFragment extends Fragment {
         });
         for (int i = orders.size() -1; i >= 0; i--) {
             sortedJsonArray.add(jsonList.get(i));
-//            System.out.println(jsonList.get(i));
+
         }
         return sortedJsonArray;
     }
@@ -297,13 +291,6 @@ public class HomeFragment extends Fragment {
             t_r[i].setLayoutParams(params);
 
 
-            //t_r[i].setBackgroundColor(Color.GREEN);
-//            t_r[i].setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    Toast.makeText(getActivity(),demand_type,Toast.LENGTH_LONG).show();
-//                }
-//            });
             tv_order_id[i] = new TextView(getActivity());
             tv_demand_type[i] = new TextView(getActivity());
             tv_total[i] = new TextView(getActivity());

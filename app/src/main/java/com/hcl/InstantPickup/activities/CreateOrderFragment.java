@@ -7,18 +7,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +28,6 @@ import com.hcl.InstantPickup.models.SingletonClass;
 import com.hcl.InstantPickup.models.createOrder.CreateOrderStatus;
 import com.hcl.InstantPickup.models.createOrder.Item;
 import com.hcl.InstantPickup.models.createOrder.ItemListAdapter;
-import com.hcl.InstantPickup.services.ApiCalls;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,14 +43,14 @@ import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreateOrderFragment extends Fragment {
-    private ApiCalls apiCalls;
-    private Map<String, Item> itemMap;
-    private Spinner spinner;
-    private TextView qtyTextView;
-    private TextView totalTextView;
-    private RecyclerView recyclerView;
-    private ItemListAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private ApiCalls apiCalls; //instance of ApiCalls class to make REST GET/POST requests
+    private Map<String, Item> itemMap; //map of available items queried from the backend
+    private Spinner spinner; //spinner element used to select item to add to cart
+    private TextView qtyTextView; //textview for user to input quantity
+    private TextView totalTextView; //textview that maintains a running total for the order
+    private RecyclerView recyclerView; //recyclerview that displays the current items in our cart
+    private ItemListAdapter mAdapter; //adapter used for storing data to populate the recyclerview
+    private RecyclerView.LayoutManager layoutManager; //layoutmanager for the recyclerviewer
 
     @Nullable
     @Override
@@ -72,21 +68,24 @@ public class CreateOrderFragment extends Fragment {
                 .build();
 
         apiCalls = retrofit.create(ApiCalls.class);
+        //retrieve list of items from backend
         getItems(view);
+        //initialize recyclerview
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         //recyclerView.setHasFixedSize(true);
-
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
+        // initialize textviews
         qtyTextView = (TextView) view.findViewById(R.id.quantity);
         totalTextView = (TextView) view.findViewById(R.id.total);
         mAdapter = new ItemListAdapter(totalTextView);
+        //set an adapter for our recylerview
         recyclerView.setAdapter(mAdapter);
+        //initialize add item button and set onclicklistener
         Button addItemButton = (Button) view.findViewById(R.id.addItemButton);
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,15 +93,18 @@ public class CreateOrderFragment extends Fragment {
                 addItem(v);
             }
         });
+        //set onclicklistener for create order button
         view.findViewById(R.id.createOrderButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                //if cart is empty, do not post order and notify user
                 if(mAdapter.getItemCount() == 0) {
                     Toast toast = Toast.makeText(getActivity(),"Please add items to your cart",Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                     toast.show();
                     return;
                 }
+                //else create orderform object and post order
                 final JsonObject paramObject = createOrderForm();
                 Call<CreateOrderStatus> call = apiCalls.createOrderPost(paramObject);
                 call.enqueue(new Callback<CreateOrderStatus>() {
@@ -139,6 +141,7 @@ public class CreateOrderFragment extends Fragment {
         });
     }
 
+    //get list of items from backend to create spinner
     private void getItems(final View view) {
         Call<JsonArray> call = apiCalls.getItems();
         call.enqueue(new Callback<JsonArray>() {
@@ -165,15 +168,14 @@ public class CreateOrderFragment extends Fragment {
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-//                textViewResult.setText(t.getMessage());
                 System.out.println(t.getMessage());
             }
         });
     }
 
+    //create spinner element to select items
     private void createSpinner(View view) {
         spinner = (Spinner) view.findViewById(R.id.itemSpinner);
-        // Spinner click listener
         // Spinner Drop down elements
         List<String> items = new ArrayList<>();
         for(String key : itemMap.keySet()) {
@@ -187,7 +189,9 @@ public class CreateOrderFragment extends Fragment {
         spinner.setAdapter(dataAdapter);
     }
 
+    //add item to the shopping cart
     public void addItem(View view) {
+        //make sure quantity field is not empty
         if(!qtyTextView.getText().toString().isEmpty()) {
             int quantity = Integer.valueOf(qtyTextView.getText().toString());
             String itemName = spinner.getSelectedItem().toString();
@@ -195,11 +199,14 @@ public class CreateOrderFragment extends Fragment {
             Item newItem = new Item(baseItem, quantity);
             int total = Integer.valueOf(totalTextView.getText().toString().replace("Total: $", ""));
             total += newItem.getPrice() * newItem.getQuantity();
+            //update displayed total
             totalTextView.setText("Total: $" + total);
+            //add the item to our ItemListAdapter
             mAdapter.addItem(newItem);
         }
     }
 
+    //create a JsonObject to send in our post request to create a new order
     private JsonObject createOrderForm() {
         JsonObject orderFormObject = new JsonObject();
         JsonArray quantityList = mAdapter.getQuantities();
@@ -208,7 +215,7 @@ public class CreateOrderFragment extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String curDate = simpleDateFormat.format(new Date());
         int total = Integer.valueOf(totalTextView.getText().toString().replace("Total: $",""));
-
+        //retrieve customer info that has previously been saved to the SingletonClass
         orderFormObject.addProperty("username", SingletonClass.getInstance().getName());
         orderFormObject.addProperty("firstname", SingletonClass.getInstance().getFirstName());
         orderFormObject.addProperty("lastname",SingletonClass.getInstance().getLastName());

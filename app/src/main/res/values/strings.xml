@@ -60,4 +60,5 @@
     <string name="scheduled">SCHEDULED</string>
     <string name="complete">COMPLETE</string>
     <string name="reached">REACHED</string>
+    <string name="allocate_order">ALLOCATE_ORDER</string>
 </resources>

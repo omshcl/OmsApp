@@ -318,6 +318,9 @@ public class HomeFragment extends Fragment {
             }else if(demand_type.equals(getString(R.string.customer_ready))){
                 demand_type = getString(R.string.reached);
             }
+            else if(demand_type.equals(getString(R.string.allocate_order))){
+                demand_type="ALLOCATED";
+            }
 
             String total = order.get("total").getAsString();
             String date=order.get("date").getAsString();

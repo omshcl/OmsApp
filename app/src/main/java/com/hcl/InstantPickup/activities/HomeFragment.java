@@ -3,6 +3,7 @@ package com.hcl.InstantPickup.activities;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hcl.InstantPickup.R;
@@ -40,6 +43,7 @@ public class HomeFragment extends Fragment {
     private ApiCalls apiCalls;
     TableLayout tl;
     private boolean is_expand = false;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @Nullable
 
     @Override
@@ -55,6 +59,15 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                CustomerDashboard dashboard = CustomerDashboard.instance;
+                dashboard.switchFragment(FragmentAcitivityConstants.HomeFragmentId);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         final String username = SingletonClass.getInstance().getName();
         TextView textView = view.findViewById(R.id.textHomeWelcome);
 
